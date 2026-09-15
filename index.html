@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cotizador y Evaluador Actuarial de Seguros y Retiro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #102a43;
+      --primary-dark: #0b1d30;
+      --primary-light: #243b53;
+      --accent: #ff6b4a;
+      --accent-hover: #e85535;
+      --teal: #0ea5e9;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-900: #0f172a;
+      --white: #ffffff;
+      --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 20px -2px rgba(16, 42, 67, 0.08);
+      --shadow-lg: 0 12px 36px -4px rgba(16, 42, 67, 0.14);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background-color: #f4f7fa;
+      color: var(--gray-900);
+      line-height: 1.5;
+      padding-bottom: 4rem;
+    }
+
+    /* Top Bar */
+    .app-bar {
+      background: var(--primary-dark);
+      color: var(--white);
+      padding: 0.8rem 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.86rem;
+    }
+    .app-badge {
+      background: rgba(255, 107, 74, 0.2);
+      color: #ffa38d;
+      border: 1px solid rgba(255, 107, 74, 0.4);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.76rem;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1240px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      padding: 2.4rem;
+      border-radius: var(--radius-lg);
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-banner::after {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(255,107,74,0.2) 0%, rgba(0,0,0,0) 70%);
+      pointer-events: none;
+    }
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .hero-sub {
+      color: var(--gray-300);
+      max-width: 680px;
+      font-size: 0.96rem;
+    }
+
+    /* Product Navigation Tabs */
+    .product-tabs {
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--gray-200);
+      padding-bottom: 0.5rem;
+      overflow-x: auto;
+    }
+    .tab-item {
+      background: transparent;
+      border: none;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--gray-600);
+      padding: 0.8rem 1.4rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .tab-item:hover {
+      color: var(--primary);
+      background: rgba(16, 42, 67, 0.05);
+    }
+    .tab-item.active {
+      color: var(--white);
+      background: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Grid Layout */
+    .engine-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 980px) {
+      .engine-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Form Cards */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--gray-200);
+      margin-bottom: 1.5rem;
+    }
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-desc {
+      font-size: 0.86rem;
+      color: var(--gray-600);
+      margin-bottom: 1.5rem;
+      margin-top: -0.8rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 0.4rem;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.94rem;
+      color: var(--gray-900);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(16, 42, 67, 0.1);
+    }
+
+    /* Live Sliders */
+    .slider-container {
+      margin-top: 0.5rem;
+    }
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.3rem;
+    }
+    .slider-val {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1.05rem;
+    }
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      background: var(--gray-200);
+      border-radius: 4px;
+      outline: none;
+      accent-color: var(--accent);
+    }
+
+    /* Radio / Segmented buttons */
+    .seg-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 0.4rem;
+      background: var(--gray-100);
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--gray-200);
+    }
+    .seg-option {
+      cursor: pointer;
+      text-align: center;
+      padding: 0.55rem 0.4rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: all 0.15s;
+      user-select: none;
+      color: var(--gray-600);
+    }
+    .seg-option.active {
+      background: var(--white);
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* Health Questionnaire Box */
+    .health-box {
+      background: #fffbeb;
+      border: 1px solid #fef3c7;
+      border-left: 4px solid var(--warning);
+      padding: 1.2rem;
+      border-radius: var(--radius-sm);
+      margin-top: 1rem;
+    }
+    .health-box-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.84rem;
+      color: var(--gray-700);
+      margin-top: 0.4rem;
+      cursor: pointer;
+    }
+    .bmi-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+    }
+
+    /* Results Dashboard (Right Column) */
+    .quote-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+      position: sticky;
+      top: 1.5rem;
+    }
+    .quote-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      padding: 1.6rem 2rem;
+    }
+    .quote-folio {
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-300);
+    }
+    .quote-insurer {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--white);
+      margin: 0.2rem 0;
+    }
+    .quote-product {
+      font-size: 0.88rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .quote-price-box {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.2rem;
+      margin-top: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .price-main {
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+    .price-period {
+      font-size: 0.82rem;
+      color: var(--gray-300);
+    }
+
+    .quote-body {
+      padding: 1.8rem;
+    }
+
+    /* Breakdown table */
+    .breakdown-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.88rem;
+    }
+    .breakdown-table tr {
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .breakdown-table td {
+      padding: 0.65rem 0;
+      color: var(--gray-700);
+    }
+    .breakdown-table td.val {
+      text-align: right;
+      font-weight: 600;
+      color: var(--gray-900);
+      font-family: var(--font-heading);
+    }
+    .breakdown-table tr.total-row {
+      border-top: 2px solid var(--gray-300);
+      border-bottom: none;
+      font-weight: 700;
+    }
+    .breakdown-table tr.total-row td {
+      padding-top: 0.8rem;
+      font-size: 1rem;
+      color: var(--primary);
+    }
+
+    /* Payment Frequency Selector */
+    .payment-freq-box {
+      margin-bottom: 1.5rem;
+    }
+    .freq-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+    }
+    .freq-btn {
+      border: 1.5px solid var(--gray-200);
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 0.2rem;
+      text-align: center;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+    .freq-btn.active {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: var(--white);
+    }
+    .freq-sub {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: normal;
+      opacity: 0.85;
+    }
+
+    /* Insurer Comparison Cards */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+    .comp-item {
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 0.8rem 0.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .comp-item.selected {
+      border-color: var(--accent);
+      background: rgba(255, 107, 74, 0.05);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+    .comp-name {
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--primary);
+    }
+    .comp-price {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-top: 0.2rem;
+      font-family: var(--font-heading);
+    }
+
+    /* Underwriting Alert */
+    .underwriting-alert {
+      padding: 0.9rem 1.1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      line-height: 1.4;
+    }
+    .alert-success { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+    .alert-warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+    .alert-danger { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+
+    /* Action Buttons */
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .btn {
+      width: 100%;
+      padding: 0.85rem 1.2rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-heading);
+      font-size: 0.92rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: var(--white);
+      color: var(--primary);
+      border: 1.5px solid var(--gray-300);
+    }
+    .btn-outline:hover {
+      background: var(--gray-50);
+      border-color: var(--primary);
+    }
+
+    /* Projection Amortization Table for PPR */
+    .table-container {
+      overflow-x: auto;
+      max-height: 400px;
+      margin-top: 1.5rem;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+    }
+    .proj-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      text-align: right;
+    }
+    .proj-table th {
+      background: var(--primary-dark);
+      color: var(--white);
+      padding: 0.7rem 0.9rem;
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    .proj-table td {
+      padding: 0.55rem 0.9rem;
+      border-bottom: 1px solid var(--gray-200);
+      font-variant-numeric: tabular-nums;
+    }
+    .proj-table tr:nth-child(even) {
+      background: var(--gray-50);
+    }
+    .proj-table tr:hover {
+      background: #eff6ff;
+    }
+
+    /* Modal for Official Policy Proposal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+    }
+    .modal-box {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      padding: 2.5rem;
+    }
+    @media print {
+      body * { visibility: hidden; }
+      .modal-box, .modal-box * { visibility: visible; }
+      .modal-box { position: absolute; left: 0; top: 0; width: 100%; max-width: 100%; border: none; box-shadow: none; padding: 0; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="app-bar">
+    <div style="display: flex; align-items: center; gap: 0.8rem;">
+      <span class="app-badge">MOTOR ACTUARIAL V3.2</span>
+      <span>Simulador y Cotizador Multirriesgo en Tiempo Real</span>
+    </div>
+    <div>Normativa CNSF / LISR Art. 151 y 185 / Catálogos Oficiales México</div>
+  </div>
+
+  <div class="container">
+    
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+      <div>
+        <h1 class="hero-title">Motor de Cotización & Evaluación Real</h1>
+        <p class="hero-sub">
+          Cotiza pólizas de seguros y proyecciones de retiro con parámetros actuariales reales: factores por código postal, tabuladores de edad, deducibles, coaseguros, beneficios fiscales de ISR y suscripción médica.
+        </p>
+      </div>
+    </div>
+
+    <!-- Main Navigation Tabs -->
+    <div class="product-tabs">
+      <button class="tab-item active" onclick="switchProduct('gmm')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        Gastos Médicos Mayores (GMM)
+      </button>
+      <button class="tab-item" onclick="switchProduct('ppr')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></svg>
+        Plan Personal de Retiro (PPR / LISR)
+      </button>
+      <button class="tab-item" onclick="switchProduct('auto')">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 17h14M4 11l2-5h12l2 5M4 11v6h16v-6M4 11h16M7 14h.01M17 14h.01"/></svg>
+        Seguro de Auto (Cotizador Multirriesgo)
+      </button>
+    </div>
+
+    <!-- MAIN ENGINE LAYOUT -->
+    <div class="engine-layout">
+
+      <!-- LEFT COLUMN: CONTROLS -->
+      <div class="controls-column">
+
+        <!-- ================= GMM SECTION ================= -->
+        <div id="section-gmm" class="product-section">
+          
+          <!-- Card 1: Perfil Demográfico -->
+          <div class="card">
+            <h2 class="card-title">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/></svg>
+              1. Perfil del Asegurado y Ubicación
+            </h2>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Edad del Titular</label>
+                <div class="slider-container">
+                  <div class="slider-header">
+                    <span style="font-size:0.8rem; color:var(--gray-600)">Años cumplidos</span>
+                    <span class="slider-val" id="gmm-age-val">32 años</span>
+                  </div>
+                  <input type="range" id="gmm-age" min="0" max="69" value="32" oninput="calculateGMM()">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Sexo Biológico (Tarificación)</label>
+                <div class="seg-group">
+                  <div class="seg-option active" onclick="setGMMSexo(this, 'M')">Masculino</div>
+                  <div class="seg-option" onclick="setGMMSexo(this, 'F')">Femenino</div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Código Postal (Residencia)</label>
+                <input type="text" class="form-input" id="gmm-cp" value="45116" maxlength="5" oninput="checkGMMZone(this.value)">
+                <span id="gmm-cp-desc" style="font-size:0.75rem; color:var(--gray-600); margin-top:3px; display:block;">Zona: Jalisco (Zapopan / GDL) · Nivel 1</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Tabaco / Fumador</label>
+                <div class="seg-group">
+                  <div class="seg-option active" onclick="setGMMTabaco(this, 'no')">No fumador</div>
+                  <div class="seg-option" onclick="setGMMTabaco(this, 'si')">Fumador (+15%)</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Suscripción Médica Simplificada -->
+            <div class="health-box">
+              <div class="health-box-title">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3Z"/></svg>
+                Evaluación Médica y Somatometría (IMC)
+              </div>
+              <div class="form-grid" style="margin-top:0.6rem;">
+                <div>
+                  <label class="form-label">Estatura (cm)</label>
+                  <input type="number" class="form-input" id="gmm-height" value="175" min="100" max="230" oninput="calculateGMM()">
+                </div>
+                <div>
+                  <label class="form-label">Peso (kg)</label>
+                  <input type="number" class="form-input" id="gmm-weight" value="74" min="30" max="200" oninput="calculateGMM()">
+                </div>
+              </div>
+              <div style="margin-top: 0.6rem; font-size: 0.82rem; color: var(--gray-700);">
+                IMC Calculado: <strong id="gmm-imc-val">24.2</strong>
+                <span id="gmm-imc-badge" class="bmi-badge" style="background:#d1fae5; color:#065f46;">Normal</span>
+              </div>
+
+              <label class="checkbox-row" style="margin-top:0.8rem;">
+                <input type="checkbox" id="gmm-preexistencia" onchange="calculateGMM()">
+                <span>Diagnóstico previo de Hipertensión, Diabetes o Cardiopatía</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Card 2: Condiciones de la Póliza -->
+          <div class="card">
+            <h2 class="card-title">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              2. Coberturas, Deducible y Hospitales
+            </h2>
+
+            <div class="form-group">
+              <label class="form-label">Nivel Hospitalario Deseado</label>
+              <select class="form-select" id="gmm-hospital" onchange="calculateGMM()">
+                <option value="triple_a">Nivel 3 / Alta Especialidad (Ángeles, Médica Sur, Puerta de Hierro, Santa Fe)</option>
+                <option value="doble_a" selected>Nivel 2 / Intermedio (Hospital Español, Real San José, San Javier)</option>
+                <option value="a">Nivel 1 / Básico (Hospitales regionales y convenios estándar)</option>
+              </select>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Deducible en territorio nacional</label>
+                <select class="form-select" id="gmm-deducible" onchange="calculateGMM()">
+                  <option value="20000">$20,000 MXN (Menor desembolso en siniestro)</option>
+                  <option value="32000" selected>$32,000 MXN (Equilibrado / Más común)</option>
+                  <option value="48000">$48,000 MXN (Prima más económica)</option>
+                  <option value="65000">$65,000 MXN (Alta participación)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Coaseguro y Tope</label>
+                <select class="form-select" id="gmm-coaseguro" onchange="calculateGMM()">
+                  <option value="10" selected>10% (Tope máximo $45,000 MXN)</option>
+                  <option value="15">15% (Tope máximo $55,000 MXN)</option>
+                  <option value="20">20% (Tope máximo $70,000 MXN)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Suma Asegurada por Padecimiento</label>
+              <div class="seg-group">
+                <div class="seg-option" onclick="setGMMSuma(this, 50000000)">$50 MDP</div>
+                <div class="seg-option active" onclick="setGMMSuma(this, 100000000)">$100 MDP</div>
+                <div class="seg-option" onclick="setGMMSuma(this, 150000000)">Sin Límite</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================= PPR SECTION ================= -->
+        <div id="section-ppr" class="product-section" style="display:none;">
+          
+          <div class="card">
+            <h2 class="card-title">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              1. Estrategia Fiscal y Horizonte de Ahorro
+            </h2>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Edad actual</label>
+                <div class="slider-container">
+                  <div class="slider-header">
+                    <span style="font-size:0.8rem; color:var(--gray-600)">Años cumplidos</span>
+                    <span class="slider-val" id="ppr-age-val">30 años</span>
+                  </div>
+                  <input type="range" id="ppr-age" min="18" max="55" value="30" oninput="calculatePPR()">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Edad de Retiro Objetivo</label>
+                <div class="seg-group">
+                  <div class="seg-option active" onclick="setPPREdadRetiro(this, 65)">65 años (LISR Art. 151)</div>
+                  <div class="seg-option" onclick="setPPREdadRetiro(this, 60)">60 años (Art. 93)</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Aportación Mensual Proyectada</label>
+              <div class="slider-container">
+                <div class="slider-header">
+                  <span style="font-size:0.8rem; color:var(--gray-600)">Monto en pesos MXN</span>
+                  <span class="slider-val" id="ppr-monto-val">$4,500</span>
+                </div>
+                <input type="range" id="ppr-monto" min="2000" max="40000" step="500" value="4500" oninput="calculatePPR()">
+              </div>
+            </div>
+
+            <!-- Régimen Fiscal LISR -->
+            <div class="form-group">
+              <label class="form-label">Artículo Fiscal LISR Aplicable</label>
+              <select class="form-select" id="ppr-regimen" onchange="calculatePPR()">
+                <option value="151" selected>Artículo 151 LISR (Deducción personal hasta 10% ingresos o 5 UMAs anuales)</option>
+                <option value="185">Artículo 185 LISR (Estímulo fiscal de hasta $152,000 MXN al año)</option>
+                <option value="93">Artículo 93 LISR (Sin deducción anual, exento total de impuestos al retiro)</option>
+              </select>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Tasa Marginal de ISR (Declaración Anual)</label>
+                <select class="form-select" id="ppr-tasa-isr" onchange="calculatePPR()">
+                  <option value="0.20">20% (Ingreso mensual ~$25,000 - $35,000)</option>
+                  <option value="0.30" selected>30% (Ingreso mensual ~$40,000 - $80,000)</option>
+                  <option value="0.34">34% (Ingreso mensual ~$90,000 - $150,000)</option>
+                  <option value="0.35">35% (Tasa máxima personas físicas)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Protección por Inflación Anual</label>
+                <div class="seg-group">
+                  <div class="seg-option active" onclick="setPPRInflacion(this, true)">Sí (5% anual / UDIs)</div>
+                  <div class="seg-option" onclick="setPPRInflacion(this, false)">Aportación Fija</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabla de Proyección Año con Año -->
+          <div class="card">
+            <h2 class="card-title">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h18M3 14h18M10 3v18M14 3v18"/></svg>
+              Corrida Financiera y Fiscal Año con Año
+            </h2>
+            <p class="section-desc">Detalle exacto de capitalización de intereses, aportaciones y devolución de impuestos SAT:</p>
+            <div class="table-container">
+              <table class="proj-table">
+                <thead>
+                  <tr>
+                    <th style="text-align:center;">Año</th>
+                    <th style="text-align:center;">Edad</th>
+                    <th>Aportación Anual</th>
+                    <th>Devolución SAT</th>
+                    <th>Rendimiento</th>
+                    <th>Fondo Acumulado</th>
+                  </tr>
+                </thead>
+                <tbody id="ppr-table-body">
+                  <!-- Filas dinámicas -->
+                </tbody>
+              </table>
+            </div>
+            <div style="margin-top: 1rem; text-align: right;">
+              <button class="btn btn-outline" style="width: auto; padding: 0.5rem 1rem; font-size: 0.8rem;" onclick="exportPPRtoCSV()">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                Descargar Tabla Completa (Excel / CSV)
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================= AUTO SECTION ================= -->
+        <div id="section-auto" class="product-section" style="display:none;">
+          
+          <div class="card">
+            <h2 class="card-title">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11.2 2 11.7 2 12.2V16c0 .6.4 1 1 1h2m14 0a2 2 0 1 1-4 0m4 0a2 2 0 1 0-4 0M5 17a2 2 0 1 1-4 0m4 0a2 2 0 1 0-4 0"/></svg>
+              1. Datos del Vehículo (Guía EBC / Libro Azul)
+            </h2>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Marca</label>
+                <select class="form-select" id="auto-marca" onchange="updateAutoModels()">
+                  <option value="Nissan">Nissan</option>
+                  <option value="Volkswagen">Volkswagen</option>
+                  <option value="Toyota">Toyota</option>
+                  <option value="Mazda">Mazda</option>
+                  <option value="Chevrolet">Chevrolet</option>
+                  <option value="Honda">Honda</option>
+                  <option value="KIA">KIA</option>
+                  <option value="Ford">Ford</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Submarca / Modelo</label>
+                <select class="form-select" id="auto-modelo" onchange="calculateAuto()">
+                  <!-- Inyectado por JS -->
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Año del Vehículo</label>
+                <select class="form-select" id="auto-anio" onchange="calculateAuto()">
+                  <option value="2026">2026 (Nuevo)</option>
+                  <option value="2025">2025</option>
+                  <option value="2024">2024</option>
+                  <option value="2023" selected>2023</option>
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option>
+                  <option value="2019">2019</option>
+                  <option value="2018">2018</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Código Postal de Circulación</label>
+                <input type="text" class="form-input" id="auto-cp" value="45116" maxlength="5" oninput="calculateAuto()">
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Edad del Conductor Habitual</label>
+                <input type="number" class="form-input" id="auto-conductor-edad" value="34" min="18" max="85" oninput="calculateAuto()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Uso del Vehículo</label>
+                <div class="seg-group">
+                  <div class="seg-option active" onclick="setAutoUso(this, 'particular')">Particular</div>
+                  <div class="seg-option" onclick="setAutoUso(this, 'comercial')">Comercial / Uber (+25%)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 class="card-title">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+              2. Paquete de Cobertura
+            </h2>
+            <div class="form-group">
+              <div class="seg-group" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="seg-option active" onclick="setAutoPaquete(this, 'amplia_plus')">Amplia Plus</div>
+                <div class="seg-option" onclick="setAutoPaquete(this, 'amplia')">Amplia Tradicional</div>
+                <div class="seg-option" onclick="setAutoPaquete(this, 'limitada')">Limitada (Robo/RC)</div>
+              </div>
+            </div>
+            <div id="auto-coverage-details" style="font-size:0.84rem; color:var(--gray-700); line-height:1.6; background:var(--gray-50); padding:1rem; border-radius:var(--radius-sm);">
+              <!-- Inyectado por JS -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: DETAILED QUOTE & UNDERWRITING (STICKY) -->
+      <div class="quote-column">
+        <div class="quote-card">
+          
+          <div class="quote-header">
+            <div class="quote-folio" id="quote-folio">FOLIO: MX-2026-84920</div>
+            <div class="quote-insurer" id="quote-insurer">GNP SEGUROS</div>
+            <div class="quote-product" id="quote-product">Línea Azul Versátil</div>
+
+            <div class="quote-price-box">
+              <div>
+                <div class="price-main" id="quote-price">$28,450</div>
+                <div class="price-period" id="quote-period">Prima Total Anual (IVA incluido)</div>
+              </div>
+              <span class="app-badge" style="background:#22c55e22; color:#4ade80; border-color:#22c55e44;">COTIZACIÓN ACTIVA</span>
+            </div>
+          </div>
+
+          <div class="quote-body">
+
+            <!-- Underwriting Status Alert -->
+            <div class="underwriting-alert alert-success" id="underwriting-alert">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" style="flex-shrink:0;"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              <div id="underwriting-text">
+                <strong>Suscripción Aprobada:</strong> Riesgo estándar sin sobrepeso ni antecedentes críticos.
+              </div>
+            </div>
+
+            <!-- Comparison Tabs between insurers -->
+            <div style="font-size:0.78rem; font-weight:700; color:var(--gray-600); margin-bottom:0.4rem; text-transform:uppercase;">
+              Comparativa de Aseguradoras Líderes
+            </div>
+            <div class="comparison-grid">
+              <div class="comp-item selected" onclick="selectInsurer(this, 'GNP')">
+                <div class="comp-name">GNP</div>
+                <div class="comp-price" id="comp-gnp-price">$28,450</div>
+              </div>
+              <div class="comp-item" onclick="selectInsurer(this, 'AXA')">
+                <div class="comp-name">AXA</div>
+                <div class="comp-price" id="comp-axa-price">$29,180</div>
+              </div>
+              <div class="comp-item" onclick="selectInsurer(this, 'MONTERREY')">
+                <div class="comp-name">Mty NYL</div>
+                <div class="comp-price" id="comp-mty-price">$27,900</div>
+              </div>
+            </div>
+
+            <!-- Frecuencia de pago -->
+            <div class="payment-freq-box">
+              <label class="form-label">Frecuencia de Pago</label>
+              <div class="freq-grid">
+                <div class="freq-btn active" onclick="setPaymentFreq(this, 1)">
+                  Anual
+                  <span class="freq-sub">Sin recargo</span>
+                </div>
+                <div class="freq-btn" onclick="setPaymentFreq(this, 2)">
+                  Semestral
+                  <span class="freq-sub">+4.5% recargo</span>
+                </div>
+                <div class="freq-btn" onclick="setPaymentFreq(this, 4)">
+                  Trimestral
+                  <span class="freq-sub">+6.5% recargo</span>
+                </div>
+                <div class="freq-btn" onclick="setPaymentFreq(this, 12)">
+                  Mensual
+                  <span class="freq-sub">+8.5% recargo</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Desglose oficial -->
+            <div style="font-size:0.78rem; font-weight:700; color:var(--gray-600); margin-bottom:0.5rem; text-transform:uppercase;">
+              Desglose Técnico de la Póliza
+            </div>
+            <table class="breakdown-table">
+              <tr>
+                <td>Prima Neta</td>
+                <td class="val" id="bd-prima-neta">$23,800</td>
+              </tr>
+              <tr>
+                <td>Derecho de Póliza / Expedición</td>
+                <td class="val" id="bd-derecho">$680</td>
+              </tr>
+              <tr>
+                <td>Recargo por Pago Fraccionado</td>
+                <td class="val" id="bd-recargo">$0</td>
+              </tr>
+              <tr>
+                <td>I.V.A. (16%)</td>
+                <td class="val" id="bd-iva">$3,916</td>
+              </tr>
+              <tr class="total-row">
+                <td id="bd-label-total">Total Anual</td>
+                <td class="val" id="bd-total">$28,396</td>
+              </tr>
+            </table>
+
+            <!-- Botones de Acción -->
+            <div class="btn-group">
+              <button class="btn btn-primary" onclick="openPolicyProposal()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Generar Propuesta Formal (PDF)
+              </button>
+              <a href="#" id="wa-btn" target="_blank" class="btn btn-outline" style="color:#059669; border-color:#10b981;">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                Validar Cotización por WhatsApp
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- MODAL DE PROPUESTA FORMAL DE PÓLIZA (PRINTABLE / PDF READY) -->
+  <div class="modal-overlay" id="modal-proposal">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid var(--primary); padding-bottom:1rem; margin-bottom:1.5rem;">
+        <div>
+          <div style="font-size:0.75rem; color:var(--gray-600); font-weight:700; text-transform:uppercase;">Comprobante de Cotización Actuarial</div>
+          <h2 style="font-family:var(--font-heading); color:var(--primary); font-size:1.6rem; font-weight:800;" id="prop-insurer-title">GNP SEGUROS MÉXICO</h2>
+          <div style="font-size:0.85rem; color:var(--accent); font-weight:600;" id="prop-product-title">Línea Azul Versátil</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--gray-900);" id="prop-folio">FOLIO: MX-2026-84920</div>
+          <div style="font-size:0.78rem; color:var(--gray-600);">Vigencia: 30 días naturales</div>
+          <div style="font-size:0.78rem; color:var(--gray-600);" id="prop-date">Fecha: 15/09/2026</div>
+        </div>
+      </div>
+
+      <div id="prop-content" style="font-size:0.9rem; line-height:1.6; color:var(--gray-800);">
+        <!-- Inyectado dinámicamente -->
+      </div>
+
+      <div class="no-print" style="margin-top:2rem; display:flex; justify-content:flex-end; gap:1rem; border-top:1px solid var(--gray-200); padding-top:1.2rem;">
+        <button class="btn btn-outline" style="width:auto;" onclick="closePolicyProposal()">Cerrar</button>
+        <button class="btn btn-primary" style="width:auto;" onclick="window.print()">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          Imprimir / Guardar en PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // FORMATEADORES DE MONEDA
+    const fmt = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 });
+    const fmtDec = new Intl.NumberFormat('es-MX', { maximumFractionDigits: 1 });
+
+    // ESTADO GENERAL
+    let currentProduct = 'gmm'; // 'gmm', 'ppr', 'auto'
+    let currentInsurer = 'GNP'; // 'GNP', 'AXA', 'MONTERREY'
+    let paymentFrequency = 1; // 1: Anual, 2: Semestral, 4: Trimestral, 12: Mensual
+    let pprExportData = [];
+
+    // VARIABLES GMM
+    let gmmSexo = 'M';
+    let gmmTabaco = 'no';
+    let gmmSuma = 100000000;
+    let gmmZoneFactor = 1.15; // Jalisco / CDMX
+
+    // VARIABLES PPR
+    let pprEdadRetiro = 65;
+    let pprConInflacion = true;
+
+    // VARIABLES AUTO
+    let autoUso = 'particular';
+    let autoPaquete = 'amplia_plus';
+    const autoCatalog = {
+      Nissan: [
+        { name: 'Versa Sense / Advance', val: 345000 },
+        { name: 'Sentra SR / Exclusive', val: 490000 },
+        { name: 'Kicks Platinum', val: 460000 },
+        { name: 'Frontier Doble Cabina', val: 560000 }
+      ],
+      Volkswagen: [
+        { name: 'Jetta Comfortline', val: 430000 },
+        { name: 'Taos Highline', val: 550000 },
+        { name: 'Tiguan R-Line', val: 680000 },
+        { name: 'Polo TSI', val: 360000 }
+      ],
+      Toyota: [
+        { name: 'Corolla LE / SE', val: 450000 },
+        { name: 'RAV4 XLE', val: 620000 },
+        { name: 'Yaris Sedán', val: 325000 },
+        { name: 'Hilux Chasis / Doble Cabina', val: 540000 }
+      ],
+      Mazda: [
+        { name: 'Mazda 3 Sedán i Grand Touring', val: 465000 },
+        { name: 'CX-30 Grand Touring', val: 515000 },
+        { name: 'CX-5 Signature', val: 670000 },
+        { name: 'Mazda 2 Hatchback', val: 335000 }
+      ],
+      Chevrolet: [
+        { name: 'Aveo Premier Sedán', val: 310000 },
+        { name: 'Tracker Premier', val: 495000 },
+        { name: 'Onix Premier', val: 375000 },
+        { name: 'Cheyenne High Country', val: 1250000 }
+      ],
+      Honda: [
+        { name: 'Civic Touring', val: 580000 },
+        { name: 'CR-V Turbo Plus', val: 740000 },
+        { name: 'HR-V Uniq / Touring', val: 525000 },
+        { name: 'City Prime', val: 410000 }
+      ],
+      KIA: [
+        { name: 'Rio Sedán / Hatchback', val: 315000 },
+        { name: 'Forte GT Line', val: 445000 },
+        { name: 'Seltos EX Pack', val: 480000 },
+        { name: 'Sportage SXL', val: 630000 }
+      ],
+      Ford: [
+        { name: 'Ranger XLT', val: 780000 },
+        { name: 'Bronco Sport Big Bend', val: 710000 },
+        { name: 'Explorer Limited', val: 1150000 },
+        { name: 'Mustang GT', val: 1080000 }
+      ]
+    };
+
+    function switchProduct(prod) {
+      currentProduct = prod;
+      document.querySelectorAll('.tab-item').forEach((btn, i) => {
+        btn.classList.toggle('active', ['gmm', 'ppr', 'auto'][i] === prod);
+      });
+      document.getElementById('section-gmm').style.display = prod === 'gmm' ? 'block' : 'none';
+      document.getElementById('section-ppr').style.display = prod === 'ppr' ? 'block' : 'none';
+      document.getElementById('section-auto').style.display = prod === 'auto' ? 'block' : 'none';
+
+      if (prod === 'gmm') calculateGMM();
+      else if (prod === 'ppr') calculatePPR();
+      else if (prod === 'auto') {
+        updateAutoModels();
+        calculateAuto();
+      }
+    }
+
+    /* ===================================================
+       CÁLCULO ACTUARIAL REAL GASTOS MÉDICOS MAYORES (GMM)
+       =================================================== */
+    function setGMMSexo(el, val) {
+      el.parentElement.querySelectorAll('.seg-option').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      gmmSexo = val;
+      calculateGMM();
+    }
+
+    function setGMMTabaco(el, val) {
+      el.parentElement.querySelectorAll('.seg-option').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      gmmTabaco = val;
+      calculateGMM();
+    }
+
+    function setGMMSuma(el, val) {
+      el.parentElement.querySelectorAll('.seg-option').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      gmmSuma = val;
+      calculateGMM();
+    }
+
+    function checkGMMZone(cp) {
+      const desc = document.getElementById('gmm-cp-desc');
+      if (cp.startsWith('45') || cp.startsWith('44')) {
+        gmmZoneFactor = 1.15;
+        desc.textContent = 'Zona: Jalisco (Zapopan / GDL) · Nivel 1';
+      } else if (cp.startsWith('0') || cp.startsWith('1')) {
+        gmmZoneFactor = 1.20;
+        desc.textContent = 'Zona: CDMX / Área Metropolitana · Nivel 1';
+      } else if (cp.startsWith('64') || cp.startsWith('66')) {
+        gmmZoneFactor = 1.18;
+        desc.textContent = 'Zona: Nuevo León (Monterrey / SPGG) · Nivel 1';
+      } else if (cp.startsWith('76')) {
+        gmmZoneFactor = 1.05;
+        desc.textContent = 'Zona: Querétaro · Nivel 2';
+      } else {
+        gmmZoneFactor = 0.95;
+        desc.textContent = 'Zona: Interior de la República · Nivel 3';
+      }
+      calculateGMM();
+    }
+
+    function calculateGMM() {
+      const age = parseInt(document.getElementById('gmm-age').value, 10);
+      document.getElementById('gmm-age-val').textContent = `${age} años`;
+
+      const height = parseFloat(document.getElementById('gmm-height').value) / 100;
+      const weight = parseFloat(document.getElementById('gmm-weight').value);
+      const imc = weight / (height * height);
+      document.getElementById('gmm-imc-val').textContent = fmtDec.format(imc);
+
+      const imcBadge = document.getElementById('gmm-imc-badge');
+      let extraprimaIMC = 0;
+      if (imc < 18.5) {
+        imcBadge.textContent = 'Bajo peso';
+        imcBadge.style.background = '#fef3c7';
+        imcBadge.style.color = '#92400e';
+      } else if (imc <= 24.9) {
+        imcBadge.textContent = 'Normal';
+        imcBadge.style.background = '#d1fae5';
+        imcBadge.style.color = '#065f46';
+      } else if (imc <= 29.9) {
+        imcBadge.textContent = 'Sobrepeso';
+        imcBadge.style.background = '#fef3c7';
+        imcBadge.style.color = '#92400e';
+      } else if (imc <= 34.9) {
+        imcBadge.textContent = 'Obesidad I (+15%)';
+        imcBadge.style.background = '#fee2e2';
+        imcBadge.style.color = '#991b1b';
+        extraprimaIMC = 0.15;
+      } else {
+        imcBadge.textContent = 'Obesidad II/III (+30%)';
+        imcBadge.style.background = '#fee2e2';
+        imcBadge.style.color = '#991b1b';
+        extraprimaIMC = 0.30;
+      }
+
+      const preexistencia = document.getElementById('gmm-preexistencia').checked;
+      const hospitalTier = document.getElementById('gmm-hospital').value;
+      const deducible = parseInt(document.getElementById('gmm-deducible').value, 10);
+      const coaseguro = parseInt(document.getElementById('gmm-coaseguro').value, 10);
+
+      // Tabla Actuarial Base (Primas puras México 2026)
+      let baseRate = 0;
+      if (age <= 18) baseRate = 12500;
+      else if (age <= 24) baseRate = 14200;
+      else if (age <= 29) baseRate = 16800;
+      else if (age <= 34) baseRate = 19900;
+      else if (age <= 39) baseRate = 24500;
+      else if (age <= 44) baseRate = 31000;
+      else if (age <= 49) baseRate = 39800;
+      else if (age <= 54) baseRate = 54000;
+      else if (age <= 59) baseRate = 72000;
+      else if (age <= 64) baseRate = 98000;
+      else baseRate = 138000;
+
+      // Factor por sexo (en edad fértil las mujeres tienen mayor costo por maternidad/reproducción)
+      if (gmmSexo === 'F' && age >= 20 && age <= 42) {
+        baseRate *= 1.28;
+      }
+
+      // Factor Nivel Hospitalario
+      const hospFactor = hospitalTier === 'triple_a' ? 1.32 : hospitalTier === 'doble_a' ? 1.12 : 0.95;
+
+      // Factor Deducible
+      const dedFactor = deducible === 20000 ? 1.25 : deducible === 32000 ? 1.0 : deducible === 48000 ? 0.82 : 0.68;
+
+      // Factor Coaseguro
+      const coasFactor = coaseguro === 10 ? 1.0 : coaseguro === 15 ? 0.93 : 0.86;
+
+      // Factor Tabaco
+      const tabacoFactor = gmmTabaco === 'si' ? 1.15 : 1.0;
+
+      // Cálculo Prima Neta GNP
+      let primaNeta = baseRate * gmmZoneFactor * hospFactor * dedFactor * coasFactor * tabacoFactor * (1 + extraprimaIMC);
+
+      // Comparativas aseguradoras
+      const gnpNeta = primaNeta;
+      const axaNeta = primaNeta * 1.03;
+      const mtyNeta = primaNeta * 0.98;
+
+      // Actualizar vista según aseguradora activa
+      let activeNeta = currentInsurer === 'GNP' ? gnpNeta : currentInsurer === 'AXA' ? axaNeta : mtyNeta;
+      const derechoPoliza = 680;
+      const recargoPorc = paymentFrequency === 1 ? 0 : paymentFrequency === 2 ? 0.045 : paymentFrequency === 4 ? 0.065 : 0.085;
+      const recargoMonto = activeNeta * recargoPorc;
+      const subtotal = activeNeta + derechoPoliza + recargoMonto;
+      const iva = subtotal * 0.16;
+      const totalPeriodo = (subtotal + iva) / paymentFrequency;
+      const totalAnualEquiv = subtotal + iva;
+
+      // Underwriting Alert
+      const alertBox = document.getElementById('underwriting-alert');
+      const alertText = document.getElementById('underwriting-text');
+      if (preexistencia) {
+        alertBox.className = 'underwriting-alert alert-danger';
+        alertText.innerHTML = '<strong>Alerta de Suscripción:</strong> Padecimiento declarado. La aseguradora requerirá informe médico y aplicará exclusión de preexistencia.';
+      } else if (extraprimaIMC > 0 || gmmTabaco === 'si') {
+        alertBox.className = 'underwriting-alert alert-warning';
+        alertText.innerHTML = '<strong>Suscripción con Extraprima:</strong> Se aplica recargo por ' + (extraprimaIMC > 0 ? 'IMC elevado ' : '') + (gmmTabaco === 'si' ? 'Hábito tabáquico.' : '.');
+      } else {
+        alertBox.className = 'underwriting-alert alert-success';
+        alertText.innerHTML = '<strong>Suscripción Aprobada:</strong> Riesgo estándar sin sobrepeso ni antecedentes críticos. Emisión inmediata.';
+      }
+
+      // Update UI
+      document.getElementById('quote-insurer').textContent = currentInsurer === 'GNP' ? 'GNP SEGUROS' : currentInsurer === 'AXA' ? 'AXA SEGUROS' : 'MONTERREY NEW YORK LIFE';
+      document.getElementById('quote-product').textContent = currentInsurer === 'GNP' ? 'Línea Azul Versátil' : currentInsurer === 'AXA' ? 'Flex Plus Hospitalario' : 'Alfa Medical Internacional';
+      document.getElementById('quote-price').textContent = fmt.format(totalPeriodo);
+      document.getElementById('quote-period').textContent = paymentFrequency === 1 ? 'Prima Total Anual (IVA inc.)' : `Pago ${paymentFrequency === 2 ? 'Semestral' : paymentFrequency === 4 ? 'Trimestral' : 'Mensual'} (IVA inc.)`;
+
+      // Update comparison tabs
+      document.getElementById('comp-gnp-price').textContent = fmt.format(calculateInsurerTotal(gnpNeta));
+      document.getElementById('comp-axa-price').textContent = fmt.format(calculateInsurerTotal(axaNeta));
+      document.getElementById('comp-mty-price').textContent = fmt.format(calculateInsurerTotal(mtyNeta));
+
+      // Update breakdown
+      document.getElementById('bd-prima-neta').textContent = fmt.format(activeNeta);
+      document.getElementById('bd-derecho').textContent = fmt.format(derechoPoliza);
+      document.getElementById('bd-recargo').textContent = fmt.format(recargoMonto);
+      document.getElementById('bd-iva').textContent = fmt.format(iva);
+      document.getElementById('bd-label-total').textContent = paymentFrequency === 1 ? 'Total Anual' : `Total por pago (${paymentFrequency === 2 ? 'Semestral' : paymentFrequency === 4 ? 'Trimestral' : 'Mensual'})`;
+      document.getElementById('bd-total').textContent = fmt.format(totalPeriodo);
+
+      updateWABtnGMM(totalAnualEquiv, age, deducible, hospitalTier);
+    }
+
+    function calculateInsurerTotal(neta) {
+      const rec = paymentFrequency === 1 ? 0 : paymentFrequency === 2 ? 0.045 : paymentFrequency === 4 ? 0.065 : 0.085;
+      const sub = neta + 680 + (neta * rec);
+      return (sub * 1.16) / paymentFrequency;
+    }
+
+    /* ===================================================
+       CÁLCULO ACTUARIAL REAL PLAN DE RETIRO (PPR / LISR)
+       =================================================== */
+    function setPPREdadRetiro(el, edad) {
+      el.parentElement.querySelectorAll('.seg-option').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      pprEdadRetiro = edad;
+      calculatePPR();
+    }
+
+    function setPPRInflacion(el, conInf) {
+      el.parentElement.querySelectorAll('.seg-option').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      pprConInflacion = conInf;
+      calculatePPR();
+    }
+
+    function calculatePPR() {
+      const edadActual = parseInt(document.getElementById('ppr-age').value, 10);
+      document.getElementById('ppr-age-val').textContent = `${edadActual} años`;
+
+      const montoMensual = parseFloat(document.getElementById('ppr-monto').value);
+      document.getElementById('ppr-monto-val').textContent = fmt.format(montoMensual);
+
+      const regimen = document.getElementById('ppr-regimen').value;
+      const tasaIsr = parseFloat(document.getElementById('ppr-tasa-isr').value);
+
+      const anios = Math.max(1, pprEdadRetiro - edadActual);
+      const tasaRendimientoAnual = 0.075; // 7.5% nominal
+      const inflacionAnual = pprConInflacion ? 0.045 : 0.0; // 4.5% en aportaciones
+      const rMes = (1 + tasaRendimientoAnual) ** (1 / 12) - 1;
+
+      let fondo = 0;
+      let totalAportado = 0;
+      let totalDevolucionSAT = 0;
+      let totalRendimientos = 0;
+
+      pprExportData = [];
+      const tbody = document.getElementById('ppr-table-body');
+      tbody.innerHTML = '';
+
+      let aporteMensualActual = montoMensual;
+
+      for (let y = 1; y <= anios; y++) {
+        let aporteAnio = 0;
+        let edad = edadActual + y;
+
+        // 12 meses
+        for (let m = 0; m < 12; m++) {
+          fondo = (fondo + aporteMensualActual) * (1 + rMes);
+          aporteAnio += aporteMensualActual;
+        }
+
+        totalAportado += aporteAnio;
+
+        // Devolución fiscal anual según artículo
+        let devolucionAnio = 0;
+        if (regimen === '151') {
+          // Tope 5 UMAs anuales en 2026 ~ $206,000 MXN
+          const aporteDeducible = Math.min(aporteAnio, 206000);
+          devolucionAnio = aporteDeducible * tasaIsr;
+        } else if (regimen === '185') {
+          // Tope $152,000 MXN
+          const aporteDeducible = Math.min(aporteAnio, 152000);
+          devolucionAnio = aporteDeducible * tasaIsr;
+        }
+
+        totalDevolucionSAT += devolucionAnio;
+        let rendAnio = fondo - totalAportado;
+
+        // Guardar para CSV
+        pprExportData.push({
+          anio: y,
+          edad: edad,
+          aporteAnual: Math.round(aporteAnio),
+          devolucion: Math.round(devolucionAnio),
+          rendimiento: Math.round(rendAnio),
+          fondo: Math.round(fondo)
+        });
+
+        // Inyectar en tabla los primeros 5 años y luego cada 5 años hasta el final
+        if (y <= 5 || y % 5 === 0 || y === anios) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="text-align:center; font-weight:600;">Año ${y}</td>
+            <td style="text-align:center;">${edad} años</td>
+            <td>${fmt.format(aporteAnio)}</td>
+            <td style="color:#059669; font-weight:600;">+${fmt.format(devolucionAnio)}</td>
+            <td style="color:var(--accent); font-weight:600;">${fmt.format(rendAnio)}</td>
+            <td style="font-weight:700; color:var(--primary);">${fmt.format(fondo)}</td>
+          `;
+          tbody.appendChild(tr);
+        }
+
+        if (pprConInflacion) {
+          aporteMensualActual *= (1 + inflacionAnual);
+        }
+      }
+
+      totalRendimientos = fondo - totalAportado;
+      const pensionMensualEstimada = fondo / 240; // Renta vitalicia técnica 20 años
+
+      // Actualizar tarjeta derecha
+      document.getElementById('quote-insurer').textContent = 'PPR CONSOLIDA GNP';
+      document.getElementById('quote-product').textContent = `Retiro a los ${pprEdadRetiro} años (Art. ${regimen} LISR)`;
+      document.getElementById('quote-price').textContent = fmt.format(fondo);
+      document.getElementById('quote-period').textContent = `Fondo Estimado Acumulado a los ${pprEdadRetiro} años`;
+
+      document.getElementById('bd-prima-neta').textContent = fmt.format(totalAportado);
+      document.getElementById('bd-derecho').textContent = fmt.format(totalDevolucionSAT);
+      document.getElementById('bd-recargo').textContent = fmt.format(totalRendimientos);
+      document.getElementById('bd-iva').textContent = (fondo / totalAportado).toFixed(2) + 'x';
+      
+      document.querySelector('.breakdown-table tr:nth-child(1) td:first-child').textContent = 'Tu Aportación Total';
+      document.querySelector('.breakdown-table tr:nth-child(2) td:first-child').textContent = 'Devolución Total SAT (ISR)';
+      document.querySelector('.breakdown-table tr:nth-child(3) td:first-child').textContent = 'Interés Compuesto Generado';
+      document.querySelector('.breakdown-table tr:nth-child(4) td:first-child').textContent = 'Multiplicador de tu dinero';
+
+      document.getElementById('bd-label-total').textContent = 'Pensión Mensual Proyectada';
+      document.getElementById('bd-total').textContent = fmt.format(pensionMensualEstimada) + ' / mes';
+
+      // Comparativas de proyecciones
+      document.getElementById('comp-gnp-price').textContent = fmt.format(fondo);
+      document.getElementById('comp-axa-price').textContent = fmt.format(fondo * 0.94);
+      document.getElementById('comp-mty-price').textContent = fmt.format(fondo * 0.97);
+
+      // Alert
+      const alertBox = document.getElementById('underwriting-alert');
+      const alertText = document.getElementById('underwriting-text');
+      alertBox.className = 'underwriting-alert alert-success';
+      alertText.innerHTML = `<strong>Optimización Fiscal Verificada:</strong> Al deducir bajo el Art. ${regimen} de la LISR, recuperas hasta <strong>${fmt.format(totalDevolucionSAT)}</strong> de impuestos en tus declaraciones anuales.`;
+
+      updateWABtnPPR(fondo, montoMensual, edadActual, pprEdadRetiro);
+    }
+
+    function exportPPRtoCSV() {
+      let csvContent = 'data:text/csv;charset=utf-8,';
+      csvContent += 'Anio,Edad,Aportacion_Anual,Devolucion_SAT_ISR,Rendimiento_Acumulado,Fondo_Total\n';
+      pprExportData.forEach(row => {
+        csvContent += `${row.anio},${row.edad},${row.aporteAnual},${row.devolucion},${row.rendimiento},${row.fondo}\n`;
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', 'corrida_actuarial_ppr.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    /* ===================================================
+       CÁLCULO ACTUARIAL REAL SEGURO DE AUTO MULTIRRIESGO
+       =================================================== */
+    function updateAutoModels() {
+      const marca = document.getElementById('auto-marca').value;
+      const modelSelect = document.getElementById('auto-modelo');
+      modelSelect.innerHTML = '';
+      const list = autoCatalog[marca] || [];
+      list.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.val;
+        opt.textContent = `${m.name} (~${fmt.format(m.val)})`;
+        modelSelect.appendChild(opt);
+      });
+      calculateAuto();
+    }
+
+    function setAutoUso(el, uso) {
+      el.parentElement.querySelectorAll('.seg-option').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      autoUso = uso;
+      calculateAuto();
+    }
+
+    function setAutoPaquete(el, paq) {
+      el.parentElement.querySelectorAll('.seg-option').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      autoPaquete = paq;
+      calculateAuto();
+    }
+
+    function calculateAuto() {
+      const valorComercial = parseFloat(document.getElementById('auto-modelo').value) || 350000;
+      const anio = parseInt(document.getElementById('auto-anio').value, 10);
+      const edad = parseInt(document.getElementById('auto-conductor-edad').value, 10);
+      const cp = document.getElementById('auto-cp').value;
+
+      // Factor de riesgo geográfico por CP
+      let riesgoCP = 1.0;
+      if (cp.startsWith('55') || cp.startsWith('56') || cp.startsWith('09')) riesgoCP = 1.35; // Edomex / Iztapalapa
+      else if (cp.startsWith('44') || cp.startsWith('45')) riesgoCP = 1.15; // Guadalajara
+      else if (cp.startsWith('76')) riesgoCP = 0.92; // Querétaro (bajo robo)
+      else if (cp.startsWith('97')) riesgoCP = 0.82; // Mérida (mínimo robo)
+
+      // Factor edad conductor
+      const factorEdad = edad < 25 ? 1.25 : edad <= 35 ? 1.08 : edad >= 72 ? 1.12 : 1.0;
+      const factorUso = autoUso === 'comercial' ? 1.28 : 1.0;
+      const factorAntiguedad = 1 + Math.max(0, 2026 - anio) * 0.008;
+
+      // Tasas por cobertura
+      let tasaBase = 0.038; // 3.8% del valor
+      let costoFijo = 3200;
+
+      if (autoPaquete === 'amplia_plus') {
+        tasaBase = 0.046;
+        costoFijo = 4100;
+      } else if (autoPaquete === 'limitada') {
+        tasaBase = 0.019;
+        costoFijo = 2100;
+      }
+
+      let primaNeta = (costoFijo + valorComercial * tasaBase) * riesgoCP * factorEdad * factorUso * factorAntiguedad;
+      primaNeta = Math.max(primaNeta, 5800);
+
+      // Desglose
+      const derechoPoliza = 650;
+      const recargoPorc = paymentFrequency === 1 ? 0 : paymentFrequency === 2 ? 0.045 : paymentFrequency === 4 ? 0.065 : 0.085;
+      const recargoMonto = primaNeta * recargoPorc;
+      const subtotal = primaNeta + derechoPoliza + recargoMonto;
+      const iva = subtotal * 0.16;
+      const totalPeriodo = (subtotal + iva) / paymentFrequency;
+      const totalAnual = subtotal + iva;
+
+      // Update right card
+      document.getElementById('quote-insurer').textContent = currentInsurer === 'GNP' ? 'GNP AUTO' : currentInsurer === 'AXA' ? 'AXA AUTO' : 'QUALITAS COMPAÑÍA';
+      document.getElementById('quote-product').textContent = autoPaquete === 'amplia_plus' ? 'Paquete Amplia Plus (Cero Deducible)' : autoPaquete === 'amplia' ? 'Paquete Amplia Tradicional' : 'Paquete Cobertura Limitada';
+      document.getElementById('quote-price').textContent = fmt.format(totalPeriodo);
+      document.getElementById('quote-period').textContent = paymentFrequency === 1 ? 'Prima Total Anual (IVA inc.)' : `Pago ${paymentFrequency === 2 ? 'Semestral' : paymentFrequency === 4 ? 'Trimestral' : 'Mensual'}`;
+
+      document.getElementById('bd-prima-neta').textContent = fmt.format(primaNeta);
+      document.getElementById('bd-derecho').textContent = fmt.format(derechoPoliza);
+      document.getElementById('bd-recargo').textContent = fmt.format(recargoMonto);
+      document.getElementById('bd-iva').textContent = fmt.format(iva);
+      document.getElementById('bd-label-total').textContent = paymentFrequency === 1 ? 'Total Anual' : 'Total por Periodo';
+      document.getElementById('bd-total').textContent = fmt.format(totalPeriodo);
+
+      document.getElementById('comp-gnp-price').textContent = fmt.format(totalAnual);
+      document.getElementById('comp-axa-price').textContent = fmt.format(totalAnual * 1.04);
+      document.getElementById('comp-mty-price').textContent = fmt.format(totalAnual * 0.97);
+
+      // Details box
+      const details = document.getElementById('auto-coverage-details');
+      if (autoPaquete === 'amplia_plus') {
+        details.innerHTML = `
+          <strong>Incluye Cobertura Amplia Plus:</strong><br>
+          • Daños Materiales: Deducible 3% (exención en pérdida total)<br>
+          • Robo Total: Deducible 0% en el primer siniestro<br>
+          • Responsabilidad Civil: $4,000,000 MXN + Asistencia Legal y Fianza<br>
+          • Auto Sustituto por hasta 30 días en pérdida total o parcial<br>
+          • Gastos Médicos Ocupantes: $350,000 MXN sin deducible
+        `;
+      } else if (autoPaquete === 'amplia') {
+        details.innerHTML = `
+          <strong>Incluye Cobertura Amplia Tradicional:</strong><br>
+          • Daños Materiales: Deducible 5%<br>
+          • Robo Total: Deducible 10%<br>
+          • Responsabilidad Civil a Terceros: $3,000,000 MXN<br>
+          • Gastos Médicos Ocupantes: $200,000 MXN<br>
+          • Asistencia Vial completa (Grúa, Paso de corriente, Cerrajero)
+        `;
+      } else {
+        details.innerHTML = `
+          <strong>Incluye Cobertura Limitada:</strong><br>
+          • Robo Total: Deducible 10%<br>
+          • Responsabilidad Civil a Terceros: $3,000,000 MXN<br>
+          • Gastos Médicos Ocupantes: $150,000 MXN<br>
+          • <em>Nota: No cubre daños materiales por colisión propia.</em>
+        `;
+      }
+
+      // Underwriting Alert
+      const alertBox = document.getElementById('underwriting-alert');
+      const alertText = document.getElementById('underwriting-text');
+      alertBox.className = 'underwriting-alert alert-success';
+      alertText.innerHTML = `<strong>Tarifa Actuarial Verificada:</strong> Índice de siniestralidad zona CP ${cp} ponderado al ${Math.round(riesgoCP * 100)}%. Vehículo elegible para 12 MSI.`;
+
+      updateWABtnAuto(totalAnual, valorComercial, anio);
+    }
+
+    /* ================= HELPERS & ACTIONS ================= */
+    function selectInsurer(el, name) {
+      document.querySelectorAll('.comp-item').forEach(i => i.classList.remove('selected'));
+      el.classList.add('selected');
+      currentInsurer = name;
+      if (currentProduct === 'gmm') calculateGMM();
+      else if (currentProduct === 'ppr') calculatePPR();
+      else if (currentProduct === 'auto') calculateAuto();
+    }
+
+    function setPaymentFreq(el, freq) {
+      document.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      paymentFrequency = freq;
+      if (currentProduct === 'gmm') calculateGMM();
+      else if (currentProduct === 'ppr') calculatePPR();
+      else if (currentProduct === 'auto') calculateAuto();
+    }
+
+    function updateWABtnGMM(total, age, deducible, hosp) {
+      const msg = `Hola Asesor, coticé en el Motor Actuarial un Seguro de Gastos Médicos Mayores con ${currentInsurer}: ${age} años, deducible de ${fmt.format(deducible)}, nivel ${hosp}. La prima anual estimada es de ${fmt.format(total)}. Me gustaría revisarla formalmente.`;
+      document.getElementById('wa-btn').href = `https://wa.me/525500000000?text=${encodeURIComponent(msg)}`;
+    }
+
+    function updateWABtnPPR(fondo, aporte, edad, retiro) {
+      const msg = `Hola Asesor, hice la corrida financiera de mi Plan Personal de Retiro (PPR): aportando ${fmt.format(aporte)}/mes de los ${edad} a los ${retiro} años. Fondo proyectado: ${fmt.format(fondo)}. Deseo tramitar mi asesoría fiscal y deducibilidad.`;
+      document.getElementById('wa-btn').href = `https://wa.me/525500000000?text=${encodeURIComponent(msg)}`;
+    }
+
+    function updateWABtnAuto(total, valor, anio) {
+      const marca = document.getElementById('auto-marca').value;
+      const msg = `Hola Asesor, coticé el seguro de mi ${marca} ${anio} (valor aprox. ${fmt.format(valor)}) en paquete ${autoPaquete}. Prima anual estimada: ${fmt.format(total)}. Quisiera emitir la póliza.`;
+      document.getElementById('wa-btn').href = `https://wa.me/525500000000?text=${encodeURIComponent(msg)}`;
+    }
+
+    /* Modal Proposal */
+    function openPolicyProposal() {
+      const modal = document.getElementById('modal-proposal');
+      const content = document.getElementById('prop-content');
+      const insurerTitle = document.getElementById('prop-insurer-title');
+      const prodTitle = document.getElementById('prop-product-title');
+
+      insurerTitle.textContent = document.getElementById('quote-insurer').textContent;
+      prodTitle.textContent = document.getElementById('quote-product').textContent;
+      document.getElementById('prop-folio').textContent = document.getElementById('quote-folio').textContent;
+
+      if (currentProduct === 'gmm') {
+        const edad = document.getElementById('gmm-age').value;
+        const ded = document.getElementById('gmm-deducible').options[document.getElementById('gmm-deducible').selectedIndex].text;
+        const hosp = document.getElementById('gmm-hospital').options[document.getElementById('gmm-hospital').selectedIndex].text;
+        const total = document.getElementById('quote-price').textContent;
+
+        content.innerHTML = `
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1.2rem; border-radius:8px; margin-bottom:1.5rem;">
+            <h3 style="font-size:1rem; color:var(--primary); margin-bottom:0.6rem;">Resumen de Condiciones de Aseguramiento</h3>
+            <ul style="padding-left:1.2rem; line-height:1.8;">
+              <li><strong>Titular Asegurado:</strong> ${edad} años cumplidos (${gmmSexo === 'M' ? 'Masculino' : 'Femenino'})</li>
+              <li><strong>Plan & Cobertura:</strong> ${prodTitle.textContent}</li>
+              <li><strong>Deducible en Territorio Nacional:</strong> ${ded}</li>
+              <li><strong>Red Hospitalaria:</strong> ${hosp}</li>
+              <li><strong>Coaseguro:</strong> 10% topado a $45,000 MXN en todos los niveles</li>
+              <li><strong>Maternidad:</strong> Cubierta con periodo de espera de 10 meses</li>
+            </ul>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:baseline; border-top:2px solid var(--primary); padding-top:1rem;">
+            <span style="font-size:1.1rem; font-weight:700;">Prima Neta + IVA Total:</span>
+            <span style="font-size:1.6rem; font-weight:800; color:var(--primary);">${total}</span>
+          </div>
+          <p style="font-size:0.75rem; color:var(--gray-600); margin-top:1rem;">
+            *Esta cotización está sujeta a las condiciones generales de la aseguradora y suscripción formal. Los precios incluyen impuestos aplicables y derechos de póliza.
+          </p>
+        `;
+      } else if (currentProduct === 'ppr') {
+        const edad = document.getElementById('ppr-age').value;
+        const aporte = document.getElementById('ppr-monto-val').textContent;
+        const fondo = document.getElementById('quote-price').textContent;
+        const reg = document.getElementById('ppr-regimen').options[document.getElementById('ppr-regimen').selectedIndex].text;
+
+        content.innerHTML = `
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1.2rem; border-radius:8px; margin-bottom:1.5rem;">
+            <h3 style="font-size:1rem; color:var(--primary); margin-bottom:0.6rem;">Dictamen de Proyección de Retiro</h3>
+            <ul style="padding-left:1.2rem; line-height:1.8;">
+              <li><strong>Edad Inicial:</strong> ${edad} años | <strong>Edad de Retiro:</strong> ${pprEdadRetiro} años</li>
+              <li><strong>Aportación Mensual Inicial:</strong> ${aporte}</li>
+              <li><strong>Marco Fiscal:</strong> ${reg}</li>
+              <li><strong>Fondo Estimado Acumulado a los ${pprEdadRetiro} años:</strong> <strong style="color:var(--primary); font-size:1.1rem;">${fondo}</strong></li>
+              <li><strong>Pensión Mensual Equivalente (20 años):</strong> ${document.getElementById('bd-total').textContent}</li>
+            </ul>
+          </div>
+          <p style="font-size:0.75rem; color:var(--gray-600); margin-top:1rem;">
+            *Rendimientos calculados con base en tasas históricas compuestas en fideicomisos institucionales autorizados por la CNSF y el SAT.
+          </p>
+        `;
+      } else {
+        const marca = document.getElementById('auto-marca').value;
+        const modelo = document.getElementById('auto-modelo').options[document.getElementById('auto-modelo').selectedIndex].text;
+        const anio = document.getElementById('auto-anio').value;
+        const total = document.getElementById('quote-price').textContent;
+
+        content.innerHTML = `
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1.2rem; border-radius:8px; margin-bottom:1.5rem;">
+            <h3 style="font-size:1rem; color:var(--primary); margin-bottom:0.6rem;">Ficha Técnica del Vehículo Asegurado</h3>
+            <ul style="padding-left:1.2rem; line-height:1.8;">
+              <li><strong>Vehículo:</strong> ${marca} ${modelo} (Año ${anio})</li>
+              <li><strong>Paquete:</strong> ${document.getElementById('quote-product').textContent}</li>
+              <li><strong>Responsabilidad Civil a Terceros:</strong> $4,000,000 MXN</li>
+              <li><strong>Uso:</strong> ${autoUso === 'particular' ? 'Particular Nacional' : 'Comercial'}</li>
+              <li><strong>Beneficio Adicional:</strong> Asistencia legal, grúa ilimitada y fianza incluida</li>
+            </ul>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:baseline; border-top:2px solid var(--primary); padding-top:1rem;">
+            <span style="font-size:1.1rem; font-weight:700;">Prima Total:</span>
+            <span style="font-size:1.6rem; font-weight:800; color:var(--primary);">${total}</span>
+          </div>
+        `;
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function closePolicyProposal() {
+      document.getElementById('modal-proposal').style.display = 'none';
+    }
+
+    // Inicializar
+    calculateGMM();
+  </script>
+</body>
+</html>
