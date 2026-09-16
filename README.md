@@ -24,8 +24,23 @@ Demostración de **Vonoa Web**: cómo se vería el sitio de un agente de seguros
 
 - **Tipografía:** Archivo 800 para display a escala de viewport · Inter para prosa · **IBM Plex Mono para cada cifra, etiqueta y número de sección**. La jerarquía tipográfica refuerza qué es dato y qué es prosa.
 - **Color:** papel cálido `#f2efe8` (no el dark-SaaS genérico), tinta `#14110f`, un solo acento verde `#1f4d3d`. Ámbar y rojo quedan reservados para señalar `Estimado` y alertas.
-- **Retícula visible:** líneas verticales fijas de fondo y hairlines entre secciones. La estructura como decoración honesta.
+- **Retícula visible:** hairlines entre secciones y bordes de rejilla (stats, ramos, hero-meta, tablas). Hubo líneas verticales fijas de fondo; se retiraron porque estorbaban la lectura.
 - **Sin esquinas redondeadas ni sombras.** Bordes de 1px, thumb del slider en rombo.
+
+### Fotografía
+
+Dos imágenes de banco de [Pexels](https://www.pexels.com/license/), en `img/`:
+
+| Archivo | Uso | Autor |
+|---|---|---|
+| `ruben-retrato.jpg` | Retrato, sección 01 | Moisés Sánchez |
+| `asesoria.jpg` | Banda, sección 02 | Mikhail Nilov |
+
+Ambas llevan un rótulo visible dentro de la propia página que las declara como foto de stock, y crédito al pie. **No son personas del sector asegurador.** Es la misma lógica que el resto del sitio: si un dato es estimado se dice, y si una foto es de banco también.
+
+Al sustituirlas por fotos reales del agente hay que quitar esos rótulos (`.ph-note` y el `figcaption` de `.photo-band`) y el párrafo de créditos del pie.
+
+> Nota de implementación: el atributo `height` de un `<img>` se aplica como *presentation hint* y anula `aspect-ratio`. La banda necesita `height: auto` explícito para respetar su 16/7.
 
 ### Animación
 
@@ -72,11 +87,11 @@ const TELEFONO = '';   // ej. '+523312345678'
 const CORREO   = '';   // ej. 'ruben@ejemplo.mx'
 ```
 
-Para un agente real hay que sustituir además: nombre, trayectoria, número de compañías, folio de cédula CNSF verificable, y el retrato (el marcador `.portrait` tiene el espacio reservado).
+Para un agente real hay que sustituir además: nombre, trayectoria, número de compañías, folio de cédula CNSF verificable y las dos fotografías (ver *Fotografía* arriba).
 
 ## Desarrollo
 
-Un solo `index.html`. Única dependencia externa: GSAP 3.12.5 + ScrollTrigger por CDN, y Google Fonts.
+Un `index.html` más la carpeta `img/`. Dependencias externas: GSAP 3.12.5 + ScrollTrigger por CDN y Google Fonts.
 
 ```bash
 python -m http.server 8055
