@@ -65,15 +65,10 @@
 
     .rule-top { border-top: 1px solid var(--rule); }
 
-    /* Líneas verticales de fondo, fijas. La estructura como decoración honesta. */
-    .grid-lines {
-      position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gut);
-      display: grid; grid-template-columns: repeat(4, 1fr);
-    }
-    .grid-lines span { border-left: 1px solid var(--rule); opacity: .55; }
-    .grid-lines span:first-child { border-left: none; }
-    @media (max-width: 720px) { .grid-lines { display: none; } }
+    /* Las lineas verticales fijas estorbaban la lectura: se retiraron.
+       La estructura la sostienen las hairlines horizontales y los bordes
+       de las rejillas (stats, ramos, hero-meta, tablas). */
+    .grid-lines { display: none; }
 
     main, .app-bar, .disclaimer-bar, .site-footer { position: relative; z-index: 1; }
 
@@ -160,8 +155,26 @@
       aspect-ratio: 4/5; border: 1px solid var(--rule); background: var(--paper-deep);
       position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
     }
+    /* La fuente es un plano de tres cuartos: se acerca un poco para que el
+       rostro pese lo que debe en una pagina personal. */
+    .portrait img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center top;
+      display: block; transform: scale(1.32); transform-origin: center 12%;
+    }
     .portrait .initials { font-family: var(--f-display); font-size: clamp(4rem, 12vw, 8rem); font-weight: 800; color: var(--rule-strong); letter-spacing: -.05em; }
-    .portrait .ph-note { position: absolute; left: 0; right: 0; bottom: 0; padding: .6rem .8rem; background: var(--ink); color: var(--paper); font-family: var(--f-mono); font-size: .66rem; letter-spacing: .07em; text-transform: uppercase; }
+
+    /* Banda fotografica de la seccion 02 */
+    .photo-band { border: 1px solid var(--rule); margin-bottom: clamp(1.6rem, 3vw, 2.4rem); position: relative; }
+    /* height:auto es indispensable: el atributo height del <img> se aplica como
+       hint de presentacion y anula el aspect-ratio si no se neutraliza. */
+    .photo-band img { width: 100%; height: auto; aspect-ratio: 16/7; object-fit: cover; object-position: center 58%; display: block; }
+    .photo-band figcaption {
+      position: absolute; left: 0; bottom: 0; background: var(--ink); color: var(--paper);
+      font-family: var(--f-mono); font-size: .64rem; letter-spacing: .08em; text-transform: uppercase;
+      padding: .5rem .8rem;
+    }
+    @media (max-width: 720px) { .photo-band img { aspect-ratio: 4/3; height: auto; } }
+    .portrait .ph-note { position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; padding: .6rem .8rem; background: var(--ink); color: var(--paper); font-family: var(--f-mono); font-size: .66rem; letter-spacing: .07em; text-transform: uppercase; }
 
     .profile-body p { font-size: clamp(1rem, 1.4vw, 1.1rem); color: var(--ink-soft); margin-bottom: 1.1rem; max-width: 60ch; }
     .profile-body p strong { color: var(--ink); font-weight: 600; }
@@ -500,10 +513,11 @@
         </div>
 
         <div class="profile">
-          <div class="portrait rv">
-            <span class="initials">RA</span>
-            <span class="ph-note">Retrato · espacio reservado</span>
-          </div>
+          <figure class="portrait rv">
+            <img src="img/ruben-retrato.jpg" width="1100" height="1465" loading="lazy" decoding="async"
+                 alt="Retrato de estudio de un hombre con lentes y traje gris, usado como imagen del agente ficticio.">
+            <figcaption class="ph-note">Foto de stock · no es una persona real del sector</figcaption>
+          </figure>
 
           <div class="profile-body rv">
             <p>Llevo <strong>catorce años</strong> colocando seguros en Jalisco. Empecé como agente cautivo de una sola compañía y me salí por una razón simple: cuando solo puedes ofrecer un producto, siempre es el producto correcto.</p>
@@ -551,6 +565,12 @@
             <p class="section-lede">Cuatro pasos. Ninguno incluye que te presione a firmar el mismo día.</p>
           </div>
         </div>
+
+        <figure class="photo-band rv">
+          <img src="img/asesoria.jpg" width="1600" height="1167" loading="lazy" decoding="async"
+               alt="Manos sobre una mesa de trabajo con una solicitud de seguro, una libreta y una laptop durante una asesoria.">
+          <figcaption>Foto de stock · escena ilustrativa</figcaption>
+        </figure>
 
         <div class="steps">
           <div class="step rv">
@@ -1321,6 +1341,8 @@
       </ul>
 
       <p style="margin-top:1.1rem;"><span class="tag-dato tag-estimado">Estimado</span> &mdash; <strong>todo lo demás</strong>: tarifas base por edad, factores de zona, deducible, coaseguro, suma asegurada, tabaquismo, IMC, precios de vehículos, curva de depreciación, recargos por pago fraccionado, derechos de póliza, rendimientos y la dispersión entre Aseguradora A, B y C. Son parámetros de referencia construidos para esta demostración. <strong>No provienen de las tarifas de ninguna compañía</strong> y pueden diferir de forma importante de un precio real.</p>
+
+      <p style="margin-top:1.1rem;"><strong>Fotografías.</strong> Las imágenes son de banco (stock) bajo licencia de <a href="https://www.pexels.com/license/" target="_blank" rel="noopener">Pexels</a> y <strong>no corresponden a ninguna persona del sector asegurador</strong>. Retrato: <strong>Moisés Sánchez</strong>. Escena de asesoría: <strong>Mikhail Nilov</strong>. Están aquí como marcador de diseño; en un sitio real se sustituyen por fotografías del propio agente.</p>
 
       <p style="margin-top:1.1rem;"><strong>Aviso.</strong> Este sitio es una demostración técnica con fines educativos, desarrollada por Vonoa Web. <strong>&ldquo;Rubén Alcántara&rdquo; es una persona ficticia</strong>; su trayectoria, credenciales y datos de contacto son ilustrativos y no corresponden a ninguna persona real. Vonoa no es una aseguradora ni un agente de seguros, no intermedia la contratación de pólizas y no brinda asesoría financiera, fiscal ni de inversiones. Las cifras que produce el simulador no constituyen una oferta ni una cotización vinculante. La contratación de seguros en México debe realizarse a través de instituciones autorizadas y agentes con cédula vigente ante la <strong>Comisión Nacional de Seguros y Fianzas (CNSF)</strong>. Antes de tomar cualquier decisión fiscal, consulta a un contador público.</p>
 
