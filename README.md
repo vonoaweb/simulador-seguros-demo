@@ -12,10 +12,11 @@ Demostración de **Vonoa Web**: cómo se vería el sitio de un agente de seguros
 | 01 | Perfil | Posicionamiento (independiente vs cautivo), credenciales, 4 cifras con contador |
 | 02 | Proceso | Diagnóstico → comparativo → suscripción → acompañamiento |
 | 03 | Ramos | GMM, PPR, Auto, Vida — los tres primeros enlazan al simulador |
-| 04 | Anatomía de una prima | Sección con *pin* y *scrub*: la prima se descompone en sus 4 conceptos conforme bajas |
-| 05 | Simulador | El motor completo (GMM / PPR / Auto) |
-| 06 | FAQ | Seis dudas reales, con los números del simulador de respaldo |
-| 07 | Contacto | Datos configurables |
+| 04 | Con quién cotizo | 24 aseguradoras reales con su razón social del registro CNSF |
+| 05 | Anatomía de una prima | Sección con *pin* y *scrub*: la prima se descompone en sus 4 conceptos conforme bajas |
+| 06 | Simulador | El motor completo (GMM / PPR / Auto) |
+| 07 | FAQ | Seis dudas reales, con los números del simulador de respaldo |
+| 08 | Contacto | Datos configurables |
 | — | Pie | Fuentes citadas + aviso legal |
 
 ## Diseño
@@ -68,6 +69,21 @@ Cada cifra va etiquetada. **`Oficial`** = fuente pública citada al pie. **`Esti
 | Clasificación IMC | <18.5 / 18.5–24.9 / 25–29.9 / ≥30 | OMS |
 
 **Estimado:** tarifas base por edad, factores de zona, deducible, coaseguro, suma asegurada, tabaquismo, IMC, precios de vehículos, curva de depreciación, recargos por pago fraccionado, derechos de póliza, rendimientos y la dispersión entre A, B y C.
+
+## Nombres reales vs. precios inventados
+
+La sección 04 nombra **24 aseguradoras reales** con su razón social exacta, tomada del [registro público de la CNSF](https://listainstituciones.cnsf.gob.mx/) (CSV oficial, corte **30/06/2026**: 113 instituciones — 85 Seguros, 11 Salud, 9 Fianzas, 6 Pensiones, 2 Vivienda).
+
+La distinción que sostiene todo el diseño:
+
+- **Quién existe en el mercado** → dato real y verificable uno por uno. Va con nombre y apellido.
+- **Cuánto cuesta una póliza** → estimación nuestra. Va con perfiles anónimos A/B/C.
+
+Colgar un precio inventado del nombre de una compañía real sería engañoso aunque la página avise que es demo, así que el simulador nunca usa esos nombres. La propia sección 04 lo explica en pantalla.
+
+Aviso incluido: las compañías se muestran como panorama del mercado; **no hay relación comercial, nombramiento ni patrocinio** con la demo.
+
+Detalle que da credibilidad y suele desconocerse: el **ramo Salud tiene autorización distinta a Seguros** bajo la LISF. Por eso AXA y Quálitas aparecen dos veces — son entidades separadas con autorizaciones separadas.
 
 ## El simulador
 

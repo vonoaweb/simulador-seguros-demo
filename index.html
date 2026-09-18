@@ -135,6 +135,10 @@
     .hero-meta {
       margin-top: clamp(1.8rem, 4vw, 3rem);
       display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      /* column-gap explicito: con auto-fit pueden quedar 2 columnas aun por
+         debajo de 720px, donde la media query anula el padding lateral. Sin
+         gap los textos de columnas vecinas se tocan. */
+      column-gap: clamp(1rem, 3vw, 2rem);
       border-top: 1px solid var(--rule);
     }
     .hero-meta > div { padding: 1.1rem 1.2rem 1.1rem 0; border-right: 1px solid var(--rule); }
@@ -211,6 +215,24 @@
     .ramo li:last-child { border-bottom: none; }
     .ramo li::before { content: '—'; color: var(--rule-strong); }
     .ramo .tag-sim { display: inline-block; margin-top: 1rem; font-family: var(--f-mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); border-bottom: 1px solid var(--accent); padding-bottom: 2px; }
+
+    /* ---------- Compañías (registro CNSF) ---------- */
+    .reg-note { border: 1px solid var(--rule); background: var(--paper-up); padding: clamp(1.2rem, 2.6vw, 1.8rem); margin-bottom: clamp(1.6rem, 3vw, 2.4rem); }
+    .reg-figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1.2rem; margin-bottom: 1.1rem; }
+    .reg-n { display: block; font-family: var(--f-display); font-size: clamp(1.9rem, 4.5vw, 2.9rem); font-weight: 700; letter-spacing: -.04em; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+    .reg-l { display: block; font-size: .82rem; color: var(--ink-soft); margin-top: .4rem; max-width: 26ch; }
+    .reg-note p { font-size: .86rem; color: var(--ink-soft); line-height: 1.65; border-top: 1px solid var(--rule); padding-top: 1rem; }
+
+    .carriers { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); }
+    .carrier-group { border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: clamp(1.3rem, 2.4vw, 1.8rem); }
+    .cg-title { font-family: var(--f-display); font-size: 1.05rem; font-weight: 600; letter-spacing: -.02em; margin-bottom: 1rem; padding-bottom: .7rem; border-bottom: 1px solid var(--rule); }
+    .cg-badge { display: inline-block; font-family: var(--f-mono); font-size: .6rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; background: var(--accent-wash); color: var(--accent); padding: 2px 6px; margin-left: .4rem; vertical-align: 2px; }
+    .cg-list { list-style: none; }
+    .cg-list li { padding: .62rem 0; border-bottom: 1px solid var(--rule); }
+    .cg-list li:last-child { border-bottom: none; }
+    .cg-list b { display: block; font-size: .95rem; font-weight: 600; letter-spacing: -.01em; }
+    .cg-list span { display: block; font-size: .68rem; color: var(--ink-faint); line-height: 1.4; margin-top: 2px; }
+    .cg-foot { font-size: .78rem; color: var(--ink-soft); line-height: 1.6; margin-top: 1rem; padding-top: .9rem; border-top: 1px solid var(--rule); }
 
     /* ---------- Anatomía de la prima (sección con pin + scrub) ---------- */
     .anatomy { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.5rem, 4vw, 4rem); align-items: center; min-height: 60vh; }
@@ -463,7 +485,7 @@
     <div class="shell">
       <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
       <p>
-        <strong>Página de demostración.</strong> &ldquo;Rubén Alcántara&rdquo; es una <strong>persona ficticia</strong> creada por Vonoa Web para mostrar cómo se vería el sitio de un agente de seguros; su trayectoria y sus cifras son ilustrativas. El simulador entrega <strong>estimaciones</strong> calculadas con parámetros propios que <strong>no provienen de la tarifa de ninguna aseguradora</strong>, y no constituyen una oferta, cotización ni asesoría financiera, fiscal o de seguros. Las compañías aparecen como perfiles anónimos (A, B, C). Los datos fiscales &mdash;UMA, tarifa ISR, topes de deducción, IVA&mdash; sí son oficiales y están citados al pie.
+        <strong>Página de demostración.</strong> &ldquo;Rubén Alcántara&rdquo; es una <strong>persona ficticia</strong> creada por Vonoa Web para mostrar cómo se vería el sitio de un agente de seguros; su trayectoria y sus cifras son ilustrativas. El simulador entrega <strong>estimaciones</strong> calculadas con parámetros propios que <strong>no provienen de la tarifa de ninguna aseguradora</strong>, y no constituyen una oferta, cotización ni asesoría financiera, fiscal o de seguros. Las compañías que se nombran en la sección 04 sí existen y están en el registro de la CNSF, pero <strong>Rubén no tiene relación con ninguna</strong>; dentro del simulador van como perfiles anónimos (A, B, C) justo porque sus precios son inventados. Los datos fiscales &mdash;UMA, tarifa ISR, topes de deducción, IVA&mdash; sí son oficiales y están citados al pie.
       </p>
     </div>
   </div>
@@ -536,19 +558,19 @@
 
         <div class="stats">
           <div class="stat rv">
-            <div class="stat-num" data-count="14">0</div>
+            <div class="stat-num" data-count="14"><span class="n">0</span></div>
             <div class="stat-lab">años colocando pólizas en Jalisco</div>
           </div>
           <div class="stat rv">
-            <div class="stat-num" data-count="9">0</div>
+            <div class="stat-num" data-count="9"><span class="n">0</span></div>
             <div class="stat-lab">aseguradoras que puedo comparar</div>
           </div>
           <div class="stat rv">
-            <div class="stat-num" data-count="4">0</div>
+            <div class="stat-num" data-count="4"><span class="n">0</span></div>
             <div class="stat-lab">ramos: médicos, retiro, auto y vida</div>
           </div>
           <div class="stat rv">
-            <div class="stat-num" data-count="48"><span class="suf">h</span></div>
+            <div class="stat-num" data-count="48"><span class="n">0</span><span class="suf">h</span></div>
             <div class="stat-lab">para devolverte un comparativo completo</div>
           </div>
         </div>
@@ -661,10 +683,90 @@
     </section>
 
     <!-- ============ 04 · ANATOMÍA DE UNA PRIMA (pin + scrub) ============ -->
-    <section class="section" id="anatomia">
+
+    <!-- ============ 04 · COMPAÑÍAS ============ -->
+    <section class="section" id="companias">
       <div class="shell">
         <div class="section-head rv">
           <div class="section-num">04</div>
+          <div>
+            <h2 class="section-title">Con quién cotizo</h2>
+            <p class="section-lede">Todas estas compañías existen y están en el <strong>registro público de instituciones autorizadas de la CNSF</strong>. Los nombres aparecen tal como están inscritos, no como los usa la publicidad.</p>
+          </div>
+        </div>
+
+        <div class="reg-note rv">
+          <div class="reg-figs">
+            <div><span class="reg-n mono" data-count="113"><span class="n">0</span></span><span class="reg-l">instituciones autorizadas en total</span></div>
+            <div><span class="reg-n mono" data-count="85"><span class="n">0</span></span><span class="reg-l">del ramo Seguros</span></div>
+            <div><span class="reg-n mono" data-count="11"><span class="n">0</span></span><span class="reg-l">autorizadas en el ramo Salud</span></div>
+          </div>
+          <p>
+            Cifras del registro de la <strong>Comisión Nacional de Seguros y Fianzas</strong>, con corte al <strong>30 de junio de 2026</strong>: 85 instituciones de Seguros, 11 de Salud, 9 de Fianzas, 6 de Pensiones y 2 de Vivienda.
+            <span class="tag-dato tag-oficial">Oficial</span>
+          </p>
+        </div>
+
+        <div class="carriers">
+          <div class="carrier-group rv">
+            <h3 class="cg-title">Vida, gastos médicos y retiro</h3>
+            <ul class="cg-list">
+              <li><b>GNP</b><span class="mono">Grupo Nacional Provincial, S.A.B.</span></li>
+              <li><b>AXA</b><span class="mono">AXA Seguros, S.A. de C.V.</span></li>
+              <li><b>Monterrey New York Life</b><span class="mono">Seguros Monterrey New York Life, S.A. de C.V.</span></li>
+              <li><b>MetLife</b><span class="mono">Metlife México, S.A. de C.V.</span></li>
+              <li><b>Allianz</b><span class="mono">Allianz México, S.A., Compañía de Seguros</span></li>
+              <li><b>Inbursa</b><span class="mono">Seguros Inbursa, S.A., Grupo Financiero Inbursa</span></li>
+              <li><b>Mapfre</b><span class="mono">Mapfre México, S.A.</span></li>
+              <li><b>Atlas</b><span class="mono">Seguros Atlas, S.A.</span></li>
+              <li><b>Zurich</b><span class="mono">Zurich, Compañía de Seguros, S.A.</span></li>
+              <li><b>SURA</b><span class="mono">Seguros Sura, S.A. de C.V.</span></li>
+            </ul>
+          </div>
+
+          <div class="carrier-group rv">
+            <h3 class="cg-title">Ramo Salud <span class="cg-badge">autorización aparte</span></h3>
+            <ul class="cg-list">
+              <li><b>Plan Seguro</b><span class="mono">Plan Seguro, S.A. de C.V., Compañía de Seguros</span></li>
+              <li><b>BUPA México</b><span class="mono">BUPA México, Compañía de Seguros, S.A. de C.V.</span></li>
+              <li><b>Medi Access</b><span class="mono">Medi Access Seguros de Salud, S.A. de C.V.</span></li>
+              <li><b>Centauro</b><span class="mono">Seguros Centauro, Salud Especializada, S.A. de C.V.</span></li>
+              <li><b>Sofía</b><span class="mono">Sofía Salud, S.A.</span></li>
+              <li><b>Quálitas Salud</b><span class="mono">Quálitas Salud, S.A. de C.V.</span></li>
+              <li><b>AXA Salud</b><span class="mono">AXA Salud, S.A. de C.V.</span></li>
+            </ul>
+            <p class="cg-foot">El ramo <strong>Salud</strong> tiene una autorización distinta a la de Seguros bajo la LISF. Por eso hay compañías que sólo pueden venderte un producto de salud y no una póliza de vida, y por eso <strong>AXA y Quálitas aparecen dos veces</strong>: son entidades separadas con autorizaciones separadas.</p>
+          </div>
+
+          <div class="carrier-group rv">
+            <h3 class="cg-title">Auto y daños</h3>
+            <ul class="cg-list">
+              <li><b>Quálitas</b><span class="mono">Quálitas, Compañía de Seguros, S.A. de C.V.</span></li>
+              <li><b>HDI</b><span class="mono">HDI Seguros, S.A. de C.V.</span></li>
+              <li><b>Chubb</b><span class="mono">Chubb Seguros México, S.A.</span></li>
+              <li><b>Banorte</b><span class="mono">Seguros Banorte, S.A. de C.V., Grupo Financiero Banorte</span></li>
+              <li><b>General de Seguros</b><span class="mono">General de Seguros, S.A.</span></li>
+              <li><b>El Potosí</b><span class="mono">Seguros El Potosí, S.A.</span></li>
+              <li><b>Prevem</b><span class="mono">Prevem Seguros, S.A. de C.V.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="legal-box rv" style="border-left-color: var(--amber);">
+          <b>Qué es real aquí y qué no.</b> Los nombres y las cifras de esta sección salen del registro oficial de la CNSF y se pueden verificar uno por uno en
+          <a href="https://listainstituciones.cnsf.gob.mx/" target="_blank" rel="noopener">listainstituciones.cnsf.gob.mx</a>.
+          Lo que <b>no</b> es real es la relación: Rubén Alcántara es una persona ficticia y no tiene contrato con ninguna de estas compañías.
+          En el sitio de un agente real, aquí van únicamente las compañías con las que tiene nombramiento vigente.
+          <br><br>
+          Por la misma razón, <b>el simulador de más abajo no usa estos nombres</b>. Sus precios son estimaciones nuestras, y colgar un precio inventado del nombre de una compañía real sería engañoso — aunque la página avise que es una demo. Ahí las compañías van como perfiles anónimos A, B y C.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="anatomia">
+      <div class="shell">
+        <div class="section-head rv">
+          <div class="section-num">05</div>
           <div>
             <h2 class="section-title">Qué estás pagando, exactamente</h2>
             <p class="section-lede">Una prima no es un número suelto. Son cuatro conceptos apilados, y sólo el primero paga tu riesgo. Desliza para verlos aparecer.</p>
@@ -703,7 +805,7 @@
     <section class="section" id="sim">
       <div class="shell">
         <div class="section-head rv">
-          <div class="section-num">05</div>
+          <div class="section-num">06</div>
           <div>
             <h2 class="section-title">Simúlalo tú, sin dejar tu teléfono</h2>
             <p class="section-lede">El mismo motor que uso para explicar una prima en la primera llamada. Cada cifra va marcada como <span class="tag-dato tag-oficial">Oficial</span> si viene de una fuente citada, o <span class="tag-dato tag-estimado">Estimado</span> si es un parámetro de referencia de esta demo.</p>
@@ -1222,7 +1324,7 @@
     <section class="section" id="faq">
       <div class="shell">
         <div class="section-head rv">
-          <div class="section-num">06</div>
+          <div class="section-num">07</div>
           <div>
             <h2 class="section-title">Lo que casi nadie pregunta a tiempo</h2>
             <p class="section-lede">Las seis dudas que resuelvo en cada primera llamada.</p>
@@ -1284,7 +1386,7 @@
     <section class="section" id="contacto">
       <div class="shell">
         <div class="section-head rv">
-          <div class="section-num">07</div>
+          <div class="section-num">08</div>
           <div>
             <h2 class="section-title">Hablemos</h2>
           </div>
@@ -1344,7 +1446,7 @@
 
       <p style="margin-top:1.1rem;"><strong>Fotografías.</strong> Las imágenes son de banco (stock) bajo licencia de <a href="https://www.pexels.com/license/" target="_blank" rel="noopener">Pexels</a> y <strong>no corresponden a ninguna persona del sector asegurador</strong>. Retrato: <strong>Moisés Sánchez</strong>. Escena de asesoría: <strong>Mikhail Nilov</strong>. Están aquí como marcador de diseño; en un sitio real se sustituyen por fotografías del propio agente.</p>
 
-      <p style="margin-top:1.1rem;"><strong>Aviso.</strong> Este sitio es una demostración técnica con fines educativos, desarrollada por Vonoa Web. <strong>&ldquo;Rubén Alcántara&rdquo; es una persona ficticia</strong>; su trayectoria, credenciales y datos de contacto son ilustrativos y no corresponden a ninguna persona real. Vonoa no es una aseguradora ni un agente de seguros, no intermedia la contratación de pólizas y no brinda asesoría financiera, fiscal ni de inversiones. Las cifras que produce el simulador no constituyen una oferta ni una cotización vinculante. La contratación de seguros en México debe realizarse a través de instituciones autorizadas y agentes con cédula vigente ante la <strong>Comisión Nacional de Seguros y Fianzas (CNSF)</strong>. Antes de tomar cualquier decisión fiscal, consulta a un contador público.</p>
+      <p style="margin-top:1.1rem;"><strong>Aviso.</strong> Este sitio es una demostración técnica con fines educativos, desarrollada por Vonoa Web. <strong>&ldquo;Rubén Alcántara&rdquo; es una persona ficticia</strong>; su trayectoria, credenciales y datos de contacto son ilustrativos y no corresponden a ninguna persona real. Las instituciones nombradas en la secci&oacute;n &ldquo;Con qui&eacute;n cotizo&rdquo; s&iacute; son reales y provienen del registro p&uacute;blico de la CNSF con corte al 30 de junio de 2026, pero <strong>se muestran s&oacute;lo como panorama del mercado</strong>: no hay relaci&oacute;n comercial, nombramiento ni patrocinio entre ellas y esta demostraci&oacute;n, y ninguna cifra del simulador sale de sus tarifas. Vonoa no es una aseguradora ni un agente de seguros, no intermedia la contratación de pólizas y no brinda asesoría financiera, fiscal ni de inversiones. Las cifras que produce el simulador no constituyen una oferta ni una cotización vinculante. La contratación de seguros en México debe realizarse a través de instituciones autorizadas y agentes con cédula vigente ante la <strong>Comisión Nacional de Seguros y Fianzas (CNSF)</strong>. Antes de tomar cualquier decisión fiscal, consulta a un contador público.</p>
 
       <p style="margin-top:1.1rem;">Marco normativo vigente a septiembre de 2026. Si consultas esta página en un ejercicio fiscal posterior, verifica la UMA y la tarifa del ISR del año que corresponda.</p>
 
@@ -2208,8 +2310,8 @@
 
     if (!hasGSAP || reduce) {
       document.body.classList.add('no-anim');
-      document.querySelectorAll('.stat-num[data-count]').forEach(el => {
-        el.childNodes[0].nodeValue = el.dataset.count;
+      document.querySelectorAll('[data-count]').forEach(el => {
+        el.querySelector('.n').textContent = el.dataset.count;
       });
       pintarAnatomia(4);
       return;
@@ -2228,13 +2330,16 @@
     });
 
     /* ---------- Contadores ---------- */
-    document.querySelectorAll('.stat-num[data-count]').forEach(el => {
+    document.querySelectorAll('[data-count]').forEach(el => {
       const destino = parseFloat(el.dataset.count);
+      // Se escribe en el <span class="n"> y no en el nodo de texto: hay cifras
+      // con sufijo (48h) donde el primer hijo es el <span> del sufijo.
+      const salida = el.querySelector('.n');
       const obj = { v: 0 };
       gsap.to(obj, {
         v: destino, duration: 1.4, ease: 'power2.out',
         scrollTrigger: { trigger: el, start: 'top 88%', once: true },
-        onUpdate: () => { el.childNodes[0].nodeValue = Math.round(obj.v); }
+        onUpdate: () => { salida.textContent = Math.round(obj.v); }
       });
     });
 
