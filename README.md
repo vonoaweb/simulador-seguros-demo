@@ -12,7 +12,7 @@ Demostración de **Vonoa Web**: cómo se vería el sitio de un agente de seguros
 | 01 | Perfil | Posicionamiento (independiente vs cautivo), credenciales, 4 cifras con contador |
 | 02 | Proceso | Diagnóstico → comparativo → suscripción → acompañamiento |
 | 03 | Ramos | GMM, PPR, Auto, Vida — los tres primeros enlazan al simulador |
-| 04 | Con quién cotizo | 24 aseguradoras reales con su razón social del registro CNSF |
+| 04 | Con quién cotizo | 52 aseguradoras reales con su razón social del registro CNSF |
 | 05 | Anatomía de una prima | Sección con *pin* y *scrub*: la prima se descompone en sus 4 conceptos conforme bajas |
 | 06 | Simulador | El motor completo (GMM / PPR / Auto) |
 | 07 | FAQ | Seis dudas reales, con los números del simulador de respaldo |
@@ -72,19 +72,23 @@ Cada cifra va etiquetada. **`Oficial`** = fuente pública citada al pie. **`Esti
 
 ## Nombres reales vs. precios inventados
 
-La sección 04 nombra **24 aseguradoras reales** con su razón social exacta, tomada del [registro público de la CNSF](https://listainstituciones.cnsf.gob.mx/) (CSV oficial, corte **30/06/2026**: 113 instituciones — 85 Seguros, 11 Salud, 9 Fianzas, 6 Pensiones, 2 Vivienda).
+La sección 04 nombra **52 aseguradoras reales** con su razón social exacta, tomada del [registro público de la CNSF](https://listainstituciones.cnsf.gob.mx/) (CSV oficial, corte **30/06/2026**: 113 instituciones — 85 Seguros, 11 Salud, 9 Fianzas, 6 Pensiones, 2 Vivienda).
 
 El **simulador también compara por nombre**, con compañías apropiadas a cada ramo:
 
 | Ramo | Columnas |
 |---|---|
-| GMM | GNP · AXA · Monterrey NYL |
-| Auto | Quálitas · HDI · Chubb |
-| PPR | No aplica — las columnas son escenarios de rendimiento (6 / 7.5 / 9%) |
+| GMM | GNP · AXA · Monterrey NYL · MetLife · Allianz · Inbursa |
+| Auto | Quálitas · HDI · Chubb · ANA · AIG · El Águila |
+| PPR | No aplica — 3 escenarios de rendimiento (6 / 7.5 / 9%); las otras 3 columnas se ocultan |
+
+Reparto por grupo en la sección 04: **22** de vida/GMM/retiro, **11** de Salud (todas las que existen) y **19** de auto y daños.
+
+`setCompNames` recibe un arreglo y oculta las columnas sobrantes, así que el número de compañías por ramo se cambia sin tocar el HTML. La rejilla usa `auto-fit` con `minmax(104px, 1fr)`: 6 columnas en escritorio, 2×3 a 375px.
 
 La tarjeta de resultado muestra el nombre corto y, debajo en monoespaciada, la razón social inscrita.
 
-**Lo que la página deja explícito en pantalla, junto al comparativo:** los importes **no son las tarifas de esas compañías** — los calcula la demo con parámetros propios — y la diferencia entre las tres columnas es un supuesto que **no indica cuál es realmente más barata**. El factor de dispersión (`INSURER_FACTOR`, A 1.00 / B 1.05 / C 0.96) es arbitrario y está comentado como tal en el código.
+**Lo que la página deja explícito en pantalla, junto al comparativo:** los importes **no son las tarifas de esas compañías** — los calcula la demo con parámetros propios — y la diferencia entre las tres columnas es un supuesto que **no indica cuál es realmente más barata**. El factor de dispersión (`INSURER_FACTOR`, de 0.93 a 1.09) es arbitrario y está comentado como tal en el código.
 
 Aviso incluido: las compañías se muestran como panorama del mercado; **no hay relación comercial, nombramiento ni patrocinio** con la demo.
 

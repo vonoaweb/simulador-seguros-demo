@@ -395,7 +395,9 @@
     .alert-warning { background: var(--amber-wash); border-color: var(--amber); color: #55380a; }
     .alert-danger  { background: var(--danger-wash); border-color: var(--danger); color: #6b2119; }
 
-    .comparison-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--rule-strong); }
+    /* auto-fit: 6 companias fluyen a 3+3 y bajan a 2 o 1 al angostarse. */
+    .comparison-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); border: 1px solid var(--rule-strong); }
+    .comp-item[hidden] { display: none; }
     .comp-item { padding: .85rem .6rem; text-align: center; cursor: pointer; border-right: 1px solid var(--rule-strong); transition: background .2s; }
     .comp-item:last-child { border-right: none; }
     .comp-item:hover { background: var(--paper-deep); }
@@ -403,7 +405,10 @@
     .comp-name { font-family: var(--f-mono); font-size: .64rem; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: .35rem; }
     .comp-item.selected .comp-name { color: #8fd4b4; }
     .comp-price { font-family: var(--f-mono); font-size: .92rem; font-weight: 600; font-variant-numeric: tabular-nums; }
-    @media (max-width: 480px) { .comparison-grid { grid-template-columns: 1fr; } .comp-item { border-right: none; border-bottom: 1px solid var(--rule-strong); } }
+    /* Con 6 companias, forzar 1 columna en movil deja una torre de 6 tarjetas.
+       Se deja que auto-fit resuelva (3 columnas a 375px) y solo se colapsa en
+       pantallas realmente diminutas. */
+    @media (max-width: 300px) { .comparison-grid { grid-template-columns: 1fr; } .comp-item { border-right: none; border-bottom: 1px solid var(--rule-strong); } }
 
     .payment-freq-box { margin: 1.4rem 0; }
     .freq-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--rule-strong); }
@@ -550,7 +555,7 @@
 
             <dl class="cred-list">
               <div><dt>Trayectoria</dt><dd>14 años · desde 2012</dd></div>
-              <div><dt>Compañías que cotizo</dt><dd>9 aseguradoras autorizadas</dd></div>
+              <div><dt>Compañías que cotizo</dt><dd>52 aseguradoras autorizadas</dd></div>
               <div><dt>Especialidad</dt><dd>Gastos médicos mayores y planeación de retiro</dd></div>
               <div><dt>Certificación</dt><dd>Cédula vigente ante la CNSF</dd></div>
             </dl>
@@ -564,7 +569,7 @@
             <div class="stat-lab">años colocando pólizas en Jalisco</div>
           </div>
           <div class="stat rv">
-            <div class="stat-num" data-count="9"><span class="n">0</span></div>
+            <div class="stat-num" data-count="52"><span class="n">0</span></div>
             <div class="stat-lab">aseguradoras que puedo comparar</div>
           </div>
           <div class="stat rv">
@@ -693,7 +698,7 @@
           <div class="section-num">04</div>
           <div>
             <h2 class="section-title">Con quién cotizo</h2>
-            <p class="section-lede">Todas estas compañías existen y están en el <strong>registro público de instituciones autorizadas de la CNSF</strong>. Los nombres aparecen tal como están inscritos, no como los usa la publicidad.</p>
+            <p class="section-lede"><strong>52 compañías</strong>, todas existentes y todas inscritas en el <strong>registro público de instituciones autorizadas de la CNSF</strong>. Los nombres van tal como están registrados, no como los usa la publicidad. Del ramo Salud están <strong>las 11 que hay</strong>.</p>
           </div>
         </div>
 
@@ -723,11 +728,23 @@
               <li><b>Atlas</b><span class="mono">Seguros Atlas, S.A.</span></li>
               <li><b>Zurich</b><span class="mono">Zurich, Compañía de Seguros, S.A.</span></li>
               <li><b>SURA</b><span class="mono">Seguros Sura, S.A. de C.V.</span></li>
+              <li><b>BBVA</b><span class="mono">BBVA Seguros México, S.A. de C.V., Grupo Financiero BBVA México</span></li>
+              <li><b>Banamex</b><span class="mono">Seguros Banamex, S.A. de C.V., Integrante del Grupo Financiero Banamex</span></li>
+              <li><b>HSBC</b><span class="mono">HSBC Seguros, S.A. de C.V., Grupo Financiero HSBC</span></li>
+              <li><b>Skandia</b><span class="mono">Skandia Life, S.A. de C.V.</span></li>
+              <li><b>Insignia Life</b><span class="mono">Insignia Life, S.A. de C.V.</span></li>
+              <li><b>Pan-American</b><span class="mono">Pan-American México, Compañía de Seguros, S.A. de C.V.</span></li>
+              <li><b>Prudential</b><span class="mono">Prudential Seguros México, S.A. de C.V.</span></li>
+              <li><b>Thona</b><span class="mono">Thona Seguros, S.A. de C.V.</span></li>
+              <li><b>Argos</b><span class="mono">Seguros Argos, S.A. de C.V.</span></li>
+              <li><b>Ve por Más</b><span class="mono">Seguros Ve por Más, S.A., Grupo Financiero Ve por Más</span></li>
+              <li><b>Afirme</b><span class="mono">Seguros Afirme, S.A. de C.V., Afirme Grupo Financiero</span></li>
+              <li><b>Zurich Vida</b><span class="mono">Zurich Vida, Compañía de Seguros, S.A.</span></li>
             </ul>
           </div>
 
           <div class="carrier-group rv">
-            <h3 class="cg-title">Ramo Salud <span class="cg-badge">autorización aparte</span></h3>
+            <h3 class="cg-title">Ramo Salud <span class="cg-badge">las 11 autorizadas</span></h3>
             <ul class="cg-list">
               <li><b>Plan Seguro</b><span class="mono">Plan Seguro, S.A. de C.V., Compañía de Seguros</span></li>
               <li><b>BUPA México</b><span class="mono">BUPA México, Compañía de Seguros, S.A. de C.V.</span></li>
@@ -736,6 +753,10 @@
               <li><b>Sofía</b><span class="mono">Sofía Salud, S.A.</span></li>
               <li><b>Quálitas Salud</b><span class="mono">Quálitas Salud, S.A. de C.V.</span></li>
               <li><b>AXA Salud</b><span class="mono">AXA Salud, S.A. de C.V.</span></li>
+              <li><b>Auna</b><span class="mono">Auna seguros, S.A.</span></li>
+              <li><b>General de Salud</b><span class="mono">General de Salud, Compañía de Seguros, S.A.</span></li>
+              <li><b>BBVA Salud</b><span class="mono">BBVA Seguros Salud México, S.A. de C.V., Grupo Financiero BBVA México</span></li>
+              <li><b>Odontored</b><span class="mono">Odontored Seguros Dentales, S.A. de C.V.</span></li>
             </ul>
             <p class="cg-foot">El ramo <strong>Salud</strong> tiene una autorización distinta a la de Seguros bajo la LISF. Por eso hay compañías que sólo pueden venderte un producto de salud y no una póliza de vida, y por eso <strong>AXA y Quálitas aparecen dos veces</strong>: son entidades separadas con autorizaciones separadas.</p>
           </div>
@@ -750,6 +771,18 @@
               <li><b>General de Seguros</b><span class="mono">General de Seguros, S.A.</span></li>
               <li><b>El Potosí</b><span class="mono">Seguros El Potosí, S.A.</span></li>
               <li><b>Prevem</b><span class="mono">Prevem Seguros, S.A. de C.V.</span></li>
+              <li><b>ANA Seguros</b><span class="mono">A.N.A. Compañía de Seguros, S.A. de C.V.</span></li>
+              <li><b>AIG</b><span class="mono">AIG Seguros México, S.A. de C.V.</span></li>
+              <li><b>El Águila</b><span class="mono">El Águila, Compañía de Seguros, S.A. de C.V.</span></li>
+              <li><b>Primero Seguros</b><span class="mono">Primero Seguros, S.A. de C.V.</span></li>
+              <li><b>CRABI</b><span class="mono">CRABI, S.A. de C.V.</span></li>
+              <li><b>GMX</b><span class="mono">Grupo Mexicano de Seguros, S.A. de C.V.</span></li>
+              <li><b>Zurich Aseg. Mexicana</b><span class="mono">Zurich Aseguradora Mexicana, S.A. de C.V.</span></li>
+              <li><b>Sompo</b><span class="mono">Sompo Seguros México, S.A. de C.V.</span></li>
+              <li><b>Tokio Marine</b><span class="mono">Tokio Marine, Compañía de Seguros, S.A. de C.V.</span></li>
+              <li><b>Azteca</b><span class="mono">Seguros Azteca, S.A. de C.V.</span></li>
+              <li><b>La Latinoamericana</b><span class="mono">La Latinoamericana Seguros, S.A.</span></li>
+              <li><b>Patrimonial</b><span class="mono">Aseguradora Patrimonial Daños, S.A.</span></li>
             </ul>
           </div>
         </div>
@@ -760,7 +793,7 @@
           Lo que <b>no</b> es real es la relación: Rubén Alcántara es una persona ficticia y no tiene contrato con ninguna de estas compañías.
           En el sitio de un agente real, aquí van únicamente las compañías con las que tiene nombramiento vigente.
           <br><br>
-          El simulador de más abajo compara tres de estas compañías por nombre, pero <b>los importes que arroja no son sus tarifas</b>: los calcula esta demo con parámetros propios. La diferencia entre las tres columnas es un supuesto para mostrar que conviene comparar; <b>no significa que una sea realmente más barata que otra</b>. Para un precio de verdad hay que pedir la cotización formal a cada compañía.
+          El simulador de más abajo compara <b>seis</b> de estas compañías por nombre &mdash; las de vida y gastos médicos en su pestaña, las de auto en la suya &mdash;, pero <b>los importes que arroja no son sus tarifas</b>: los calcula esta demo con parámetros propios. Las diferencias entre columnas son un supuesto para mostrar que conviene comparar; <b>no significan que una sea realmente más barata que otra</b>. Para un precio de verdad hay que pedir la cotización formal a cada compañía.
         </div>
       </div>
     </section>
@@ -1240,17 +1273,29 @@
               Comparativo estimado entre compa&ntilde;&iacute;as
             </div>
             <div class="comparison-grid">
-              <div class="comp-item selected" onclick="selectInsurer(this, 'A')">
-                <div class="comp-name">Aseguradora A</div>
+              <div class="comp-item selected" id="comp-a" onclick="selectInsurer(this, 'A')">
+                <div class="comp-name">&mdash;</div>
                 <div class="comp-price" id="comp-a-price">$0</div>
               </div>
-              <div class="comp-item" onclick="selectInsurer(this, 'B')">
-                <div class="comp-name">Aseguradora B</div>
+              <div class="comp-item" id="comp-b" onclick="selectInsurer(this, 'B')">
+                <div class="comp-name">&mdash;</div>
                 <div class="comp-price" id="comp-b-price">$0</div>
               </div>
-              <div class="comp-item" onclick="selectInsurer(this, 'C')">
-                <div class="comp-name">Aseguradora C</div>
+              <div class="comp-item" id="comp-c" onclick="selectInsurer(this, 'C')">
+                <div class="comp-name">&mdash;</div>
                 <div class="comp-price" id="comp-c-price">$0</div>
+              </div>
+              <div class="comp-item" id="comp-d" onclick="selectInsurer(this, 'D')">
+                <div class="comp-name">&mdash;</div>
+                <div class="comp-price" id="comp-d-price">$0</div>
+              </div>
+              <div class="comp-item" id="comp-e" onclick="selectInsurer(this, 'E')">
+                <div class="comp-name">&mdash;</div>
+                <div class="comp-price" id="comp-e-price">$0</div>
+              </div>
+              <div class="comp-item" id="comp-f" onclick="selectInsurer(this, 'F')">
+                <div class="comp-name">&mdash;</div>
+                <div class="comp-price" id="comp-f-price">$0</div>
               </div>
             </div>
             <span class="source-note" style="margin-bottom:0.8rem;" id="comp-note"></span>
@@ -1593,7 +1638,7 @@
   // Dispersión entre perfiles de referencia (supuesto)
   // Dispersion entre las tres columnas: SUPUESTO ilustrativo. No refleja el
   // precio real de ninguna compania ni cual es mas barata en el mercado.
-  const INSURER_FACTOR = { A: 1.00, B: 1.05, C: 0.96 };
+  const INSURER_FACTOR = { A: 1.00, B: 1.05, C: 0.96, D: 1.09, E: 0.93, F: 1.02 };
 
   // Companias reales, tomadas del registro publico de la CNSF (corte 30/06/2026).
   // Se muestran por ramo porque no todas operan los mismos: Qualitas, HDI y Chubb
@@ -1602,14 +1647,21 @@
     gmm: {
       A: { corto: 'GNP',           largo: 'Grupo Nacional Provincial, S.A.B.' },
       B: { corto: 'AXA',           largo: 'AXA Seguros, S.A. de C.V.' },
-      C: { corto: 'Monterrey NYL', largo: 'Seguros Monterrey New York Life, S.A. de C.V.' }
+      C: { corto: 'Monterrey NYL', largo: 'Seguros Monterrey New York Life, S.A. de C.V.' },
+      D: { corto: 'MetLife',       largo: 'Metlife México, S.A. de C.V.' },
+      E: { corto: 'Allianz',       largo: 'Allianz México, S.A., Compañía de Seguros' },
+      F: { corto: 'Inbursa',       largo: 'Seguros Inbursa, S.A., Grupo Financiero Inbursa' }
     },
     auto: {
       A: { corto: 'Quálitas', largo: 'Quálitas, Compañía de Seguros, S.A. de C.V.' },
       B: { corto: 'HDI',      largo: 'HDI Seguros, S.A. de C.V.' },
-      C: { corto: 'Chubb',    largo: 'Chubb Seguros México, S.A.' }
+      C: { corto: 'Chubb',     largo: 'Chubb Seguros México, S.A.' },
+      D: { corto: 'ANA',       largo: 'A.N.A. Compañía de Seguros, S.A. de C.V.' },
+      E: { corto: 'AIG',       largo: 'AIG Seguros México, S.A. de C.V.' },
+      F: { corto: 'El Águila', largo: 'El Águila, Compañía de Seguros, S.A. de C.V.' }
     }
   };
+  const CLAVES = ['A','B','C','D','E','F'];
   const ramoActual = () => (currentProduct === 'auto' ? 'auto' : 'gmm');
   const insurerName  = k => INSURERS[ramoActual()][k].corto;
   const insurerLegal = k => INSURERS[ramoActual()][k].largo;
@@ -1641,14 +1693,14 @@
     document.querySelectorAll('.comp-item').forEach((it, i) => {
       it.style.cursor = esPPR ? 'default' : 'pointer';
       if (esPPR) it.classList.toggle('selected', i === 1);
-      else it.classList.toggle('selected', ['A','B','C'][i] === currentInsurer);
+      else it.classList.toggle('selected', CLAVES[i] === currentInsurer);
     });
     document.getElementById('freq-box').style.display   = esPPR ? 'none' : 'block';
     document.getElementById('quote-dual').style.display = esPPR ? 'grid' : 'none';
     document.getElementById('comp-title').textContent   = esPPR ? 'Sensibilidad del escenario' : 'Comparativo estimado entre compañías';
     document.getElementById('comp-note').innerHTML = esPPR
       ? 'El mismo plan con tres supuestos de rendimiento bruto, ya descontada la comisión. Sirve para ver cuánto del resultado depende de un supuesto que <strong>nadie te puede garantizar</strong>. <span class="tag-dato tag-estimado">Supuesto</span>'
-      : 'Compañías reales del registro CNSF, pero <strong>estos importes no son sus tarifas</strong>: los calcula esta demo con parámetros propios. La diferencia entre las tres es un supuesto para mostrar que conviene comparar y <strong>no indica cuál es realmente más barata</strong>. <span class="tag-dato tag-estimado">Estimado</span>';
+      : 'Compañías reales del registro CNSF, pero <strong>estos importes no son sus tarifas</strong>: los calcula esta demo con parámetros propios. Las diferencias entre ellas son un supuesto para mostrar que conviene comparar y <strong>no indican cuál es realmente más barata</strong>. <span class="tag-dato tag-estimado">Estimado</span>';
     document.getElementById('bd-title').textContent     = esPPR ? 'Resumen de la proyección' : 'Desglose';
 
     if (prod === 'gmm') calculateGMM();
@@ -1658,11 +1710,13 @@
 
   // Reescribe SIEMPRE los nombres de las tres columnas comparativas, por la
   // misma razon que setBreakdownLabels: que no se queden pegados de otra pestana.
-  function setCompNames(n1, n2, n3) {
-    const nombres = [n1, n2, n3];
-    ['a', 'b', 'c'].forEach((k, i) => {
-      document.getElementById('comp-' + k + '-price')
-        .parentElement.querySelector('.comp-name').textContent = nombres[i];
+  // Recibe un arreglo: el PPR usa 3 columnas (escenarios de rendimiento) y los
+  // ramos de seguros 6 (companias). Las sobrantes se ocultan.
+  function setCompNames(nombres) {
+    CLAVES.forEach((K, i) => {
+      const item = document.getElementById('comp-' + K.toLowerCase());
+      item.hidden = i >= nombres.length;
+      if (i < nombres.length) item.querySelector('.comp-name').textContent = nombres[i];
     });
   }
 
@@ -1787,8 +1841,8 @@
       ? 'Prima anual estimada (IVA incluido)'
       : 'Pago ' + periodName() + ' estimado (IVA incluido)';
 
-    setCompNames(insurerName('A'), insurerName('B'), insurerName('C'));
-    ['A','B','C'].forEach(k => {
+    setCompNames(CLAVES.map(insurerName));
+    CLAVES.forEach(k => {
       document.getElementById('comp-' + k.toLowerCase() + '-price').textContent =
         fmt.format(totalConFactor(primaBase * INSURER_FACTOR[k], derecho));
     });
@@ -1960,7 +2014,7 @@
     document.getElementById('bd-total').textContent      = fmt.format(pensionHoy) + ' / mes';
 
     // Sensibilidad: mismo plan con distintos rendimientos brutos
-    setCompNames('6.0% bruto', '7.5% bruto', '9.0% bruto');
+    setCompNames(['6.0% bruto', '7.5% bruto', '9.0% bruto']);
     [['a', 0.06], ['b', 0.075], ['c', 0.09]].forEach(([k, rb]) => {
       document.getElementById('comp-' + k + '-price').textContent = fmt.format(simularFondoHoy(rb - comision));
     });
@@ -2116,8 +2170,8 @@
       ? 'Prima anual estimada (IVA incluido)'
       : 'Pago ' + periodName() + ' estimado (IVA incluido)';
 
-    setCompNames(insurerName('A'), insurerName('B'), insurerName('C'));
-    ['A','B','C'].forEach(k => {
+    setCompNames(CLAVES.map(insurerName));
+    CLAVES.forEach(k => {
       document.getElementById('comp-' + k.toLowerCase() + '-price').textContent =
         fmt.format(totalConFactor(primaBase * INSURER_FACTOR[k], derecho));
     });
