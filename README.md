@@ -74,12 +74,17 @@ Cada cifra va etiquetada. **`Oficial`** = fuente pública citada al pie. **`Esti
 
 La sección 04 nombra **24 aseguradoras reales** con su razón social exacta, tomada del [registro público de la CNSF](https://listainstituciones.cnsf.gob.mx/) (CSV oficial, corte **30/06/2026**: 113 instituciones — 85 Seguros, 11 Salud, 9 Fianzas, 6 Pensiones, 2 Vivienda).
 
-La distinción que sostiene todo el diseño:
+El **simulador también compara por nombre**, con compañías apropiadas a cada ramo:
 
-- **Quién existe en el mercado** → dato real y verificable uno por uno. Va con nombre y apellido.
-- **Cuánto cuesta una póliza** → estimación nuestra. Va con perfiles anónimos A/B/C.
+| Ramo | Columnas |
+|---|---|
+| GMM | GNP · AXA · Monterrey NYL |
+| Auto | Quálitas · HDI · Chubb |
+| PPR | No aplica — las columnas son escenarios de rendimiento (6 / 7.5 / 9%) |
 
-Colgar un precio inventado del nombre de una compañía real sería engañoso aunque la página avise que es demo, así que el simulador nunca usa esos nombres. La propia sección 04 lo explica en pantalla.
+La tarjeta de resultado muestra el nombre corto y, debajo en monoespaciada, la razón social inscrita.
+
+**Lo que la página deja explícito en pantalla, junto al comparativo:** los importes **no son las tarifas de esas compañías** — los calcula la demo con parámetros propios — y la diferencia entre las tres columnas es un supuesto que **no indica cuál es realmente más barata**. El factor de dispersión (`INSURER_FACTOR`, A 1.00 / B 1.05 / C 0.96) es arbitrario y está comentado como tal en el código.
 
 Aviso incluido: las compañías se muestran como panorama del mercado; **no hay relación comercial, nombramiento ni patrocinio** con la demo.
 

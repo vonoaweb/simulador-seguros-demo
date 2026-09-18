@@ -373,6 +373,8 @@
     .quote-header { background: var(--ink); color: var(--paper); padding: clamp(1.2rem, 2.4vw, 1.8rem); }
     .quote-folio { font-family: var(--f-mono); font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: #a89f94; margin-bottom: .9rem; }
     .quote-insurer { font-family: var(--f-display); font-size: 1.15rem; font-weight: 700; letter-spacing: -.02em; text-transform: uppercase; }
+    .quote-legal { font-family: var(--f-mono); font-size: .62rem; color: #a89f94; margin-top: .2rem; line-height: 1.35; }
+    .quote-legal:empty { display: none; }
     .quote-product { font-family: var(--f-mono); font-size: .76rem; color: #8fd4b4; margin-top: .25rem; letter-spacing: .02em; }
     .quote-price-box { margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid rgba(242,239,232,.18); display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
     .price-main { font-family: var(--f-display); font-size: clamp(2.1rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.045em; line-height: 1; font-variant-numeric: tabular-nums; }
@@ -485,7 +487,7 @@
     <div class="shell">
       <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
       <p>
-        <strong>Página de demostración.</strong> &ldquo;Rubén Alcántara&rdquo; es una <strong>persona ficticia</strong> creada por Vonoa Web para mostrar cómo se vería el sitio de un agente de seguros; su trayectoria y sus cifras son ilustrativas. El simulador entrega <strong>estimaciones</strong> calculadas con parámetros propios que <strong>no provienen de la tarifa de ninguna aseguradora</strong>, y no constituyen una oferta, cotización ni asesoría financiera, fiscal o de seguros. Las compañías que se nombran en la sección 04 sí existen y están en el registro de la CNSF, pero <strong>Rubén no tiene relación con ninguna</strong>; dentro del simulador van como perfiles anónimos (A, B, C) justo porque sus precios son inventados. Los datos fiscales &mdash;UMA, tarifa ISR, topes de deducción, IVA&mdash; sí son oficiales y están citados al pie.
+        <strong>Página de demostración.</strong> &ldquo;Rubén Alcántara&rdquo; es una <strong>persona ficticia</strong> creada por Vonoa Web para mostrar cómo se vería el sitio de un agente de seguros; su trayectoria y sus cifras son ilustrativas. El simulador entrega <strong>estimaciones</strong> calculadas con parámetros propios que <strong>no provienen de la tarifa de ninguna aseguradora</strong>, y no constituyen una oferta, cotización ni asesoría financiera, fiscal o de seguros. Las compañías que se nombran sí existen y están en el registro de la CNSF, pero <strong>Rubén no tiene relación con ninguna</strong> y <strong>los importes del simulador no son las tarifas de esas compañías</strong>: son estimaciones de esta demo. Los datos fiscales &mdash;UMA, tarifa ISR, topes de deducción, IVA&mdash; sí son oficiales y están citados al pie.
       </p>
     </div>
   </div>
@@ -758,7 +760,7 @@
           Lo que <b>no</b> es real es la relación: Rubén Alcántara es una persona ficticia y no tiene contrato con ninguna de estas compañías.
           En el sitio de un agente real, aquí van únicamente las compañías con las que tiene nombramiento vigente.
           <br><br>
-          Por la misma razón, <b>el simulador de más abajo no usa estos nombres</b>. Sus precios son estimaciones nuestras, y colgar un precio inventado del nombre de una compañía real sería engañoso — aunque la página avise que es una demo. Ahí las compañías van como perfiles anónimos A, B y C.
+          El simulador de más abajo compara tres de estas compañías por nombre, pero <b>los importes que arroja no son sus tarifas</b>: los calcula esta demo con parámetros propios. La diferencia entre las tres columnas es un supuesto para mostrar que conviene comparar; <b>no significa que una sea realmente más barata que otra</b>. Para un precio de verdad hay que pedir la cotización formal a cada compañía.
         </div>
       </div>
     </section>
@@ -1203,8 +1205,9 @@
 
           <div class="quote-header">
             <div class="quote-folio" id="quote-folio">SIMULACI&Oacute;N &mdash; SIN VALIDEZ CONTRACTUAL</div>
-            <div class="quote-insurer" id="quote-insurer">ASEGURADORA A</div>
-            <div class="quote-product" id="quote-product">Perfil de referencia</div>
+            <div class="quote-insurer" id="quote-insurer">&mdash;</div>
+            <div class="quote-legal" id="quote-legal"></div>
+            <div class="quote-product" id="quote-product">&mdash;</div>
 
             <div class="quote-price-box">
               <div>
@@ -1234,7 +1237,7 @@
             </div>
 
             <div style="font-size:0.78rem; font-weight:700; color:var(--gray-600); margin-bottom:0.4rem; text-transform:uppercase;" id="comp-title">
-              Bandas de precio de referencia
+              Comparativo estimado entre compa&ntilde;&iacute;as
             </div>
             <div class="comparison-grid">
               <div class="comp-item selected" onclick="selectInsurer(this, 'A')">
@@ -1472,7 +1475,7 @@
       </div>
 
       <div style="background:#fffbeb; border:1px solid #f59e0b; border-radius:8px; padding:0.9rem 1rem; margin-bottom:1.4rem; font-size:0.82rem; color:#78350f; line-height:1.6;">
-        <strong>Este documento no es una cotizaci&oacute;n ni una p&oacute;liza.</strong> Es el resumen de una simulaci&oacute;n educativa. Las cifras son estimaciones ilustrativas, no provienen de la tarifa de ninguna aseguradora y no obligan a nadie. &ldquo;Aseguradora A / B / C&rdquo; son perfiles an&oacute;nimos, no compa&ntilde;&iacute;as reales.
+        <strong>Este documento no es una cotizaci&oacute;n ni una p&oacute;liza.</strong> Es el resumen de una simulaci&oacute;n educativa. Las cifras son estimaciones ilustrativas, no provienen de la tarifa de ninguna aseguradora y no obligan a nadie. Las compa&ntilde;&iacute;as nombradas son reales, pero <strong>los importes no provienen de sus tarifas</strong> y no hay relaci&oacute;n comercial ni patrocinio entre ellas y esta demostraci&oacute;n.
       </div>
 
       <div id="prop-content" style="font-size:0.9rem; line-height:1.6; color:var(--gray-800);"></div>
@@ -1588,8 +1591,28 @@
   let autoUso = 'particular', autoPaquete = 'amplia_plus', autoZoneName = 'Guadalajara / Zapopan';
 
   // Dispersión entre perfiles de referencia (supuesto)
+  // Dispersion entre las tres columnas: SUPUESTO ilustrativo. No refleja el
+  // precio real de ninguna compania ni cual es mas barata en el mercado.
   const INSURER_FACTOR = { A: 1.00, B: 1.05, C: 0.96 };
-  const INSURER_NAME   = { A: 'ASEGURADORA A', B: 'ASEGURADORA B', C: 'ASEGURADORA C' };
+
+  // Companias reales, tomadas del registro publico de la CNSF (corte 30/06/2026).
+  // Se muestran por ramo porque no todas operan los mismos: Qualitas, HDI y Chubb
+  // son de auto y danos; GNP, AXA y Monterrey NYL de vida y gastos medicos.
+  const INSURERS = {
+    gmm: {
+      A: { corto: 'GNP',           largo: 'Grupo Nacional Provincial, S.A.B.' },
+      B: { corto: 'AXA',           largo: 'AXA Seguros, S.A. de C.V.' },
+      C: { corto: 'Monterrey NYL', largo: 'Seguros Monterrey New York Life, S.A. de C.V.' }
+    },
+    auto: {
+      A: { corto: 'Quálitas', largo: 'Quálitas, Compañía de Seguros, S.A. de C.V.' },
+      B: { corto: 'HDI',      largo: 'HDI Seguros, S.A. de C.V.' },
+      C: { corto: 'Chubb',    largo: 'Chubb Seguros México, S.A.' }
+    }
+  };
+  const ramoActual = () => (currentProduct === 'auto' ? 'auto' : 'gmm');
+  const insurerName  = k => INSURERS[ramoActual()][k].corto;
+  const insurerLegal = k => INSURERS[ramoActual()][k].largo;
 
   const autoCatalog = {
     Nissan:     [ {name:'Versa',val:345000}, {name:'Sentra',val:490000}, {name:'Kicks',val:460000}, {name:'Frontier',val:560000} ],
@@ -1622,10 +1645,10 @@
     });
     document.getElementById('freq-box').style.display   = esPPR ? 'none' : 'block';
     document.getElementById('quote-dual').style.display = esPPR ? 'grid' : 'none';
-    document.getElementById('comp-title').textContent   = esPPR ? 'Sensibilidad del escenario' : 'Bandas de precio de referencia';
+    document.getElementById('comp-title').textContent   = esPPR ? 'Sensibilidad del escenario' : 'Comparativo estimado entre compañías';
     document.getElementById('comp-note').innerHTML = esPPR
       ? 'El mismo plan con tres supuestos de rendimiento bruto, ya descontada la comisión. Sirve para ver cuánto del resultado depende de un supuesto que <strong>nadie te puede garantizar</strong>. <span class="tag-dato tag-estimado">Supuesto</span>'
-      : 'A, B y C son <strong>perfiles anónimos de referencia</strong>, no compañías reales. La dispersión entre ellas es un supuesto para ilustrar que conviene comparar antes de contratar. <span class="tag-dato tag-estimado">Estimado</span>';
+      : 'Compañías reales del registro CNSF, pero <strong>estos importes no son sus tarifas</strong>: los calcula esta demo con parámetros propios. La diferencia entre las tres es un supuesto para mostrar que conviene comparar y <strong>no indica cuál es realmente más barata</strong>. <span class="tag-dato tag-estimado">Estimado</span>';
     document.getElementById('bd-title').textContent     = esPPR ? 'Resumen de la proyección' : 'Desglose';
 
     if (prod === 'gmm') calculateGMM();
@@ -1756,14 +1779,15 @@
                    : hospitalTier === 'doble_a'  ? 'Plan Intermedio' : 'Plan Esencial';
 
     document.getElementById('quote-folio').textContent   = folio();
-    document.getElementById('quote-insurer').textContent = INSURER_NAME[currentInsurer];
+    document.getElementById('quote-insurer').textContent = insurerName(currentInsurer);
+    document.getElementById('quote-legal').textContent   = insurerLegal(currentInsurer);
     document.getElementById('quote-product').textContent = planName + ' · Suma ' + (gmmSuma === 150 ? '$150' : '$' + gmmSuma) + ' MDP';
     document.getElementById('quote-price').textContent   = fmt.format(totalPer);
     document.getElementById('quote-period').textContent  = paymentFrequency === 1
       ? 'Prima anual estimada (IVA incluido)'
       : 'Pago ' + periodName() + ' estimado (IVA incluido)';
 
-    setCompNames('Aseguradora A', 'Aseguradora B', 'Aseguradora C');
+    setCompNames(insurerName('A'), insurerName('B'), insurerName('C'));
     ['A','B','C'].forEach(k => {
       document.getElementById('comp-' + k.toLowerCase() + '-price').textContent =
         fmt.format(totalConFactor(primaBase * INSURER_FACTOR[k], derecho));
@@ -1917,6 +1941,7 @@
 
     document.getElementById('quote-folio').textContent   = folio();
     document.getElementById('quote-insurer').textContent = 'PROYECCIÓN DE RETIRO';
+    document.getElementById('quote-legal').textContent   = '';
     document.getElementById('quote-product').textContent = 'Retiro a los ' + pprEdadRetiro + ' años · ' + anios + ' años de aportación';
     document.getElementById('quote-price').textContent   = fmt.format(fondoHoy);
     document.getElementById('quote-period').textContent  = 'Fondo al retiro, en pesos de HOY (poder adquisitivo)';
@@ -2083,14 +2108,15 @@
     const paqueteName = autoPaquete === 'amplia_plus' ? 'Amplia Plus' : autoPaquete === 'amplia' ? 'Amplia' : 'Limitada';
 
     document.getElementById('quote-folio').textContent   = folio();
-    document.getElementById('quote-insurer').textContent = INSURER_NAME[currentInsurer];
+    document.getElementById('quote-insurer').textContent = insurerName(currentInsurer);
+    document.getElementById('quote-legal').textContent   = insurerLegal(currentInsurer);
     document.getElementById('quote-product').textContent = 'Paquete ' + paqueteName;
     document.getElementById('quote-price').textContent   = fmt.format(totalPer);
     document.getElementById('quote-period').textContent  = paymentFrequency === 1
       ? 'Prima anual estimada (IVA incluido)'
       : 'Pago ' + periodName() + ' estimado (IVA incluido)';
 
-    setCompNames('Aseguradora A', 'Aseguradora B', 'Aseguradora C');
+    setCompNames(insurerName('A'), insurerName('B'), insurerName('C'));
     ['A','B','C'].forEach(k => {
       document.getElementById('comp-' + k.toLowerCase() + '-price').textContent =
         fmt.format(totalConFactor(primaBase * INSURER_FACTOR[k], derecho));
